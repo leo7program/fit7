@@ -5,7 +5,6 @@ function calcularIMC() {
     const shape = document.getElementById("shape").value;
 
     const resultado = document.getElementById("resultado");
-    const progress = document.getElementById("progress");
     const pesoIdealDiv = document.getElementById("pesoIdeal");
     const tipoShapeDiv = document.getElementById("tipoShape");
 
@@ -17,13 +16,11 @@ function calcularIMC() {
     const imc = (peso / (altura * altura)).toFixed(2);
 
     // Classificação IMC
-    let classificacao = "";
-    let recomendacao = "";
-    let dicas = "";
+    let classificacao = "", recomendacao = "", dicas = "";
 
     if (imc < 18.5) {
         classificacao = "Abaixo do peso";
-        recomendacao = "O ideal é ganhar peso de forma saudável.";
+        recomendacao = "Ganhe peso de forma saudável.";
         dicas = "🏋️ Musculação, exercícios com peso corporal, aumentar proteínas.";
     } else if (imc < 24.9) {
         classificacao = "Peso normal (ideal)";
@@ -31,7 +28,7 @@ function calcularIMC() {
         dicas = "🏃‍♂️ Corrida leve, caminhada, yoga, treinos funcionais.";
     } else if (imc < 29.9) {
         classificacao = "Sobrepeso";
-        recomendacao = "Boa ideia reduzir peso.";
+        recomendacao = "Reduzir peso até a faixa saudável.";
         dicas = "🏃‍♂️ Caminhada rápida, HIIT, treino funcional, controlar alimentação.";
     } else if (imc < 34.9) {
         classificacao = "Obesidade Grau I";
@@ -54,7 +51,6 @@ function calcularIMC() {
         <p>Dicas: ${dicas}</p>
     `;
 
-    // Meta de peso
     if (!isNaN(meta)) {
         const diferenca = (peso - meta).toFixed(1);
         let msgMeta = "";
@@ -62,12 +58,6 @@ function calcularIMC() {
         else if (diferenca < 0) msgMeta = `Você precisa ganhar ${Math.abs(diferenca)} kg para a meta.`;
         else msgMeta = "Parabéns! Você já está na sua meta.";
         resultado.innerHTML += `<p>${msgMeta}</p>`;
-
-        let progresso = ((peso / meta) * 100).toFixed(0);
-        if (progresso > 100) progresso = 100;
-        if (progresso < 0) progresso = 0;
-        progress.style.width = progresso + "%";
-        progress.innerHTML = progresso + "%";
     }
 
     // Peso ideal
@@ -86,7 +76,7 @@ function calcularIMC() {
     tipoShapeDiv.innerHTML = `<p>Objetivo: <strong>${shape}</strong></p><p>${tipoShape}</p>`;
 }
 
-// Galeria de fotos
+// Função para adicionar fotos da galeria
 function adicionarFoto() {
     const upload = document.getElementById("uploadFoto");
     const fotos = document.getElementById("fotos");
