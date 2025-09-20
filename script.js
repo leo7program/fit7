@@ -1,26 +1,23 @@
 function calcularIMC() {
-    // Altura limitada
+    // Pegando os inputs
     let alturaInput = parseFloat(document.getElementById("altura").value);
-    const altura = Math.min(Math.max(alturaInput, 0.5), 2.5);
-
-    // Peso limitado
     let pesoInput = parseFloat(document.getElementById("peso").value);
-    const peso = Math.min(Math.max(pesoInput, 30), 500);
-
-    // Peso meta limitado
     let metaInput = parseFloat(document.getElementById("meta").value);
+
+    // Limitar valores
+    const altura = isNaN(alturaInput) ? 1 : Math.min(Math.max(alturaInput, 0.5), 2.5);
+    const peso = isNaN(pesoInput) ? 30 : Math.min(Math.max(pesoInput, 30), 500);
     const meta = isNaN(metaInput) ? NaN : Math.min(Math.max(metaInput, 30), 500);
 
-    const shape = document.getElementById("shape").value;
+    // Atualiza os campos com os valores ajustados
+    document.getElementById("altura").value = altura;
+    document.getElementById("peso").value = peso;
+    if (!isNaN(meta)) document.getElementById("meta").value = meta;
 
+    const shape = document.getElementById("shape").value;
     const resultado = document.getElementById("resultado");
     const pesoIdealDiv = document.getElementById("pesoIdeal");
     const tipoShapeDiv = document.getElementById("tipoShape");
-
-    if (isNaN(peso)) {
-        alert("Insira valores válidos.");
-        return;
-    }
 
     const imc = (peso / (altura * altura)).toFixed(2);
 
