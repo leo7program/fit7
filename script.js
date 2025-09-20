@@ -4,28 +4,27 @@ function mostrarAba(id){
   document.getElementById(id).style.display='block';
 }
 
-// Calcular IMC + Massa + Gordura + salvar medidas
+// Calcular Principal (IMC + Massa + Gordura + medidas)
 function calcularPrincipal(){
-  const altura=parseFloat(document.getElementById("altura").value)||1;
-  const peso=parseFloat(document.getElementById("peso").value)||30;
-  const meta=parseFloat(document.getElementById("meta").value)||NaN;
-  const shape=document.getElementById("shape").value;
-  const braco=parseFloat(document.getElementById("braco").value)||30;
-  const perna=parseFloat(document.getElementById("perna").value)||50;
-  const cintura=parseFloat(document.getElementById("cintura").value)||70;
+  const altura = parseFloat(document.getElementById("altura").value) || 1;
+  const peso = parseFloat(document.getElementById("peso").value) || 30;
+  const meta = parseFloat(document.getElementById("meta").value) || NaN;
+  const shape = document.getElementById("shape").value;
+  const braco = parseFloat(document.getElementById("braco").value) || 30;
+  const perna = parseFloat(document.getElementById("perna").value) || 50;
+  const cintura = parseFloat(document.getElementById("cintura").value) || 70;
 
-  const imc=(peso/(altura*altura)).toFixed(2);
-  const gordura=(1.2*imc)+(0.23*25)-5.4; // simplificado idade=25
-  const massa=peso*(1-gordura/100);
+  // IMC e classificação
+  const imc = (peso/(altura*altura)).toFixed(2);
+  const gordura = (1.2*imc)+(0.23*25)-5.4; // simplificado idade=25
+  const massa = peso*(1-gordura/100);
 
-  // Classificação IMC
   let classificacao="";
   if(imc<18.5) classificacao="Abaixo do peso";
   else if(imc<24.9) classificacao="Peso normal";
   else if(imc<29.9) classificacao="Sobrepeso";
   else classificacao="Obesidade";
 
-  // Meta
   let msg="";
   if(!isNaN(meta)){
     const dif=(peso-meta).toFixed(1);
@@ -34,7 +33,6 @@ function calcularPrincipal(){
     else msg="Você está na meta!";
   }
 
-  // Resultado
   document.getElementById("resultadoPrincipal").innerHTML=
     `<p>IMC: ${imc} (${classificacao})</p>
      <p>Massa muscular: ${massa.toFixed(1)} kg</p>
@@ -70,8 +68,55 @@ function gerarTreino(){
   else if(objetivo==="maromba") plano="4x musculação + 1x cardio leve";
   else if(objetivo==="emagrecer") plano="2x musculação + 4x HIIT";
   else plano="3x musculação + 2x cardio moderado";
+
   plano+=`\nNível: ${nivel}`;
 
   document.getElementById("planoTreino").innerText=plano;
-  document.getElementById("recomendacaoAlimentacao").innerText="Alimentação sugerida: Proteínas, carboidratos equilibrados e vegetais (IA placeholder)";
+  document.getElementById("recomendacaoAlimentacao").innerText=
+    "Alimentação sugerida: Proteínas magras, carboidratos complexos, vegetais e hidratação adequada (IA placeholder).";
+}
+
+// Gerar PDF
+function gerarPDF(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  // Pegar dados principais
+  const altura = document.getElementById("altura").value;
+  const peso = document.getElementById("peso").value;
+  const meta = document.getElementById("meta").value;
+  const braco = document.getElementById("braco").value;
+  const perna = document.getElementById("perna").value;
+  const cintura = document.getElementById("cintura").value;
+  const shape = document.getElementById("shape").value;
+  const resultado = document.getElementById("resultadoPrincipal").innerText;
+
+  // Shape recomendado
+  let imc = parseFloat(peso)/(parseFloat(altura)*parseFloat(altura));
+  let shapeRecomendado="";
+  if(imc<18.5) shapeRecomendado="Emagrecimento leve + definição";
+  else if(imc<25) shapeRecomendado="Manutenção/Definição";
+  else shapeRecomendado="Perda de gordura + resistência";
+
+  let alimentacao="Proteínas magras, carboidratos complexos, vegetais e hidratação adequada.";
+
+  // Adicionar texto no PDF
+  doc.setFontSize(16);
+  doc.text("Fitness App - Relatório",20,20);
+  doc.setFontSize(12);
+  let y = 30;
+  doc.text("IMC e Classificação:",20,y);
+  y+=10;
+  resultado.split("\n").forEach(line => {
+    doc.text(line,20,y);
+    y+=10;
+  });
+  y+=5;
+  doc.text(`Medidas: Braço:${braco}cm | Perna:${perna}cm | Cintura:${cintura}cm | Peso Meta:${meta}kg | Objetivo:${shape}`,20,y);
+  y+=10;
+  doc.text(`Shape Recomendado: ${shapeRecomendado}`,20,y);
+  y+=10;
+  doc.text(`Alimentação Recomendada: ${alimentacao}`,20,y);
+
+  doc.save("FitnessApp_Relatorio.pdf");
 }
