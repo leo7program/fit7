@@ -12,9 +12,9 @@
 <header>
   <h1>🏋️ Fitness App</h1>
   <nav>
-    <button onclick="mostrarAba('imc')">IMC</button>
-    <button onclick="mostrarAba('massa')">Massa & Gordura</button>
-    <button onclick="mostrarAba('treino')">Plano de Treino</button>
+    <button type="button" onclick="mostrarAba('imc')">IMC</button>
+    <button type="button" onclick="mostrarAba('massa')">Massa & Gordura</button>
+    <button type="button" onclick="mostrarAba('treino')">Plano de Treino</button>
   </nav>
 </header>
 
@@ -24,7 +24,7 @@
     <h2>Calculadora IMC</h2>
     <div class="input-group">
       <label>Altura (m)</label>
-      <input type="number" id="altura" value="1" min="0.5" max="2.5" step="0.01">
+      <input type="number" id="altura" value="1.70" min="0.5" max="2.5" step="0.01">
     </div>
     <div class="input-group">
       <label>Peso (kg)</label>
@@ -61,7 +61,7 @@
     </div>
     <div class="input-group">
       <label>Altura (m)</label>
-      <input type="number" id="alturaMuscular" min="0.5" max="2.5" value="1">
+      <input type="number" id="alturaMuscular" min="0.5" max="2.5" value="1.70">
     </div>
     <div class="input-group">
       <label>Circunferência do braço (cm)</label>
@@ -100,13 +100,11 @@
       </select>
     </div>
     <button onclick="gerarTreino()">Gerar Treino</button>
-    <button onclick="gerarPDF()">Gerar PDF</button>
     <div id="planoTreino"></div>
     <div id="recomendacaoAlimentacao"></div>
   </section>
 </main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
