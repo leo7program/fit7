@@ -1,23 +1,29 @@
 // Troca de abas
-function mostrarAba(id){
-  document.querySelectorAll('.aba').forEach(a => a.style.display='none');
-  document.getElementById(id).style.display='block';
-}
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const tabId = btn.getAttribute('data-tab');
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+  });
+});
 
-// Calcular Principal (IMC + Massa + Gordura + medidas)
+let historicoIMC = [];
+let grafico;
+
 function calcularPrincipal(){
-  const altura = parseFloat(document.getElementById("altura").value) || 1;
-  const peso = parseFloat(document.getElementById("peso").value) || 30;
-  const meta = parseFloat(document.getElementById("meta").value) || NaN;
-  const shape = document.getElementById("shape").value;
-  const braco = parseFloat(document.getElementById("braco").value) || 30;
-  const perna = parseFloat(document.getElementById("perna").value) || 50;
-  const cintura = parseFloat(document.getElementById("cintura").value) || 70;
+  const altura=parseFloat(document.getElementById("altura").value)||1;
+  const peso=parseFloat(document.getElementById("peso").value)||30;
+  const meta=parseFloat(document.getElementById("meta").value)||NaN;
+  const shape=document.getElementById("shape").value;
+  const braco=parseFloat(document.getElementById("braco").value)||30;
+  const perna=parseFloat(document.getElementById("perna").value)||50;
+  const cintura=parseFloat(document.getElementById("cintura").value)||70;
 
-  // IMC e classificação
-  const imc = (peso/(altura*altura)).toFixed(2);
-  const gordura = (1.2*imc)+(0.23*25)-5.4; // simplificado idade=25
-  const massa = peso*(1-gordura/100);
+  const imc=(peso/(altura*altura)).toFixed(2);
+  const gordura=(1.2*imc)+(0.23*25)-5.4;
+  const massa=peso*(1-gordura/100);
 
   let classificacao="";
   if(imc<18.5) classificacao="Abaixo do peso";
@@ -39,12 +45,26 @@ function calcularPrincipal(){
      <p>% Gordura: ${gordura.toFixed(1)}%</p>
      <p>${msg}</p>`;
 
-  // Salvar medidas na aba Evolução
   const medidas=document.getElementById("medidasSalvas");
   medidas.innerHTML+=`<p>Peso:${peso}kg | Braço:${braco}cm | Perna:${perna}cm | Cintura:${cintura}cm | Meta:${meta}kg | Objetivo:${shape}</p>`;
+
+  historicoIMC.push(parseFloat(imc));
+  if(grafico) grafico.destroy();
+  const ctx=document.getElementById('graficoIMC').getContext('2d');
+  grafico=new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:historicoIMC.map((_,i)=>i+1),
+      datasets:[{label:'IMC',data:historicoIMC,borderColor:'#ff6b6b',fill:false,tension:0.3}]
+    },
+    options:{
+      responsive:true,
+      plugins:{legend:{labels:{color:'#fff'}}},
+      scales:{y:{beginAtZero:true,color:'#fff'},x:{color:'#fff'}}
+    }
+  });
 }
 
-// Evolução - fotos
 function adicionarFotoEvolucao(){
   const upload=document.getElementById("uploadFotoEvolucao");
   const fotos=document.getElementById("fotosEvolucao");
@@ -59,64 +79,24 @@ function adicionarFotoEvolucao(){
   }
 }
 
-// Plano de Treino
 function gerarTreino(){
   const objetivo=document.getElementById("objetivoTreino").value;
   const nivel=document.getElementById("nivelTreino").value;
   let plano="";
   if(objetivo==="atletico") plano="3x musculação + 2x cardio leve";
-  else if(objetivo==="maromba") plano="4x musculação + 1x cardio leve";
-  else if(objetivo==="emagrecer") plano="2x musculação + 4x HIIT";
-  else plano="3x musculação + 2x cardio moderado";
-
-  plano+=`\nNível: ${nivel}`;
+  else if(objetivo==="maromba") plano="5x musculação intensa + 2x cardio";
+  else if(objetivo==="emagrecer") plano="3x musculação + 4x HIIT";
+  else plano="Manutenção leve";
 
   document.getElementById("planoTreino").innerText=plano;
-  document.getElementById("recomendacaoAlimentacao").innerText=
-    "Alimentação sugerida: Proteínas magras, carboidratos complexos, vegetais e hidratação adequada (IA placeholder).";
+  document.getElementById("recomendacaoAlimentacao").innerText="Comer proteínas magras, legumes e hidratar-se bem.";
 }
 
-// Gerar PDF
-function gerarPDF(){
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-
-  // Pegar dados principais
-  const altura = document.getElementById("altura").value;
-  const peso = document.getElementById("peso").value;
-  const meta = document.getElementById("meta").value;
-  const braco = document.getElementById("braco").value;
-  const perna = document.getElementById("perna").value;
-  const cintura = document.getElementById("cintura").value;
-  const shape = document.getElementById("shape").value;
-  const resultado = document.getElementById("resultadoPrincipal").innerText;
-
-  // Shape recomendado
-  let imc = parseFloat(peso)/(parseFloat(altura)*parseFloat(altura));
-  let shapeRecomendado="";
-  if(imc<18.5) shapeRecomendado="Emagrecimento leve + definição";
-  else if(imc<25) shapeRecomendado="Manutenção/Definição";
-  else shapeRecomendado="Perda de gordura + resistência";
-
-  let alimentacao="Proteínas magras, carboidratos complexos, vegetais e hidratação adequada.";
-
-  // Adicionar texto no PDF
-  doc.setFontSize(16);
-  doc.text("Fitness App - Relatório",20,20);
-  doc.setFontSize(12);
-  let y = 30;
-  doc.text("IMC e Classificação:",20,y);
-  y+=10;
-  resultado.split("\n").forEach(line => {
-    doc.text(line,20,y);
-    y+=10;
+function gerarPDFProfissional(){
+  html2canvas(document.querySelector('.app-container')).then(canvas=>{
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jspdf.jsPDF();
+    pdf.addImage(imgData,'PNG',0,0,210,canvas.height*210/canvas.width);
+    pdf.save('fitness_app.pdf');
   });
-  y+=5;
-  doc.text(`Medidas: Braço:${braco}cm | Perna:${perna}cm | Cintura:${cintura}cm | Peso Meta:${meta}kg | Objetivo:${shape}`,20,y);
-  y+=10;
-  doc.text(`Shape Recomendado: ${shapeRecomendado}`,20,y);
-  y+=10;
-  doc.text(`Alimentação Recomendada: ${alimentacao}`,20,y);
-
-  doc.save("FitnessApp_Relatorio.pdf");
 }
