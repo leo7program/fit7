@@ -8,41 +8,55 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🏋️ Fitness IMC App</h1>
+  <header>
+    <h1>🏋️ Fitness IMC App</h1>
+  </header>
 
   <!-- Calculadora IMC -->
-  <div class="container">
+  <section class="container">
     <h2>Calculadora IMC</h2>
-    <input type="number" id="altura" placeholder="Altura (m)" value="1" min="0.5" max="2.5" step="0.01">
-    <input type="number" id="peso" placeholder="Peso atual (kg)" min="30" max="500" step="0.1">
-    <input type="number" id="meta" placeholder="Peso meta (kg)" min="30" max="500" step="0.1">
-    <select id="shape">
-      <option value="definir">Objetivo/Shape</option>
-      <option value="atletico">Atlético</option>
-      <option value="maromba">Maromba</option>
-      <option value="emagrecer">Emagrecer</option>
-      <option value="manter">Manter</option>
-    </select>
+    <div class="input-group">
+      <label for="altura">Altura (m)</label>
+      <input type="number" id="altura" value="1" min="0.5" max="2.5" step="0.01">
+    </div>
+    <div class="input-group">
+      <label for="peso">Peso atual (kg)</label>
+      <input type="number" id="peso" min="30" max="500" step="0.1">
+    </div>
+    <div class="input-group">
+      <label for="meta">Peso meta (kg)</label>
+      <input type="number" id="meta" min="30" max="500" step="0.1">
+    </div>
+    <div class="input-group">
+      <label for="shape">Objetivo/Shape</label>
+      <select id="shape">
+        <option value="definir">Escolher</option>
+        <option value="atletico">Atlético</option>
+        <option value="maromba">Maromba</option>
+        <option value="emagrecer">Emagrecer</option>
+        <option value="manter">Manter</option>
+      </select>
+    </div>
     <button type="button" onclick="calcularIMC()">Calcular IMC</button>
     <div class="resultado" id="resultado"></div>
-  </div>
+  </section>
 
   <!-- Peso ideal e tipo de corpo -->
-  <div class="container">
+  <section class="container">
     <h2>Peso Ideal & Shape</h2>
     <div class="peso-ideal" id="pesoIdeal"></div>
     <div class="tipo-shape" id="tipoShape"></div>
-  </div>
+  </section>
 
   <!-- Galeria de progresso -->
-  <div class="container galeria">
+  <section class="container galeria">
     <h2>📸 Evolução</h2>
     <div class="fotos" id="fotos"></div>
     <div class="upload">
       <input type="file" accept="image/*" id="uploadFoto">
       <button type="button" onclick="adicionarFoto()">Adicionar Foto</button>
     </div>
-  </div>
+  </section>
 
 <script src="script.js"></script>
 </body>
