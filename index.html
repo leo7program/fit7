@@ -12,16 +12,16 @@
 <header>
   <h1>🏋️ Fitness App</h1>
   <nav>
-    <button type="button" onclick="mostrarAba('imc')">IMC</button>
-    <button type="button" onclick="mostrarAba('massa')">Massa & Gordura</button>
-    <button type="button" onclick="mostrarAba('treino')">Plano de Treino</button>
+    <button onclick="mostrarAba('principal')">Principal</button>
+    <button onclick="mostrarAba('evolucao')">Evolução</button>
+    <button onclick="mostrarAba('treino')">Plano de Treino</button>
   </nav>
 </header>
 
 <main>
-  <!-- IMC -->
-  <section id="imc" class="aba">
-    <h2>Calculadora IMC</h2>
+  <!-- Aba Principal -->
+  <section id="principal" class="aba">
+    <h2>Calculadora Fitness</h2>
     <div class="input-group">
       <label>Altura (m)</label>
       <input type="number" id="altura" value="1.70" min="0.5" max="2.5" step="0.01">
@@ -44,42 +44,33 @@
         <option value="manter">Manter</option>
       </select>
     </div>
-    <button onclick="calcularIMC()">Calcular IMC</button>
-    <div id="resultado"></div>
-    <h3>📸 Evolução</h3>
-    <div class="fotos" id="fotos"></div>
-    <input type="file" accept="image/*" id="uploadFoto">
-    <button onclick="adicionarFoto()">Adicionar Foto</button>
-  </section>
-
-  <!-- Massa muscular & Gordura -->
-  <section id="massa" class="aba" style="display:none;">
-    <h2>Massa Muscular & Gordura</h2>
     <div class="input-group">
-      <label>Peso (kg)</label>
-      <input type="number" id="pesoMuscular" min="30" max="500">
-    </div>
-    <div class="input-group">
-      <label>Altura (m)</label>
-      <input type="number" id="alturaMuscular" min="0.5" max="2.5" value="1.70">
-    </div>
-    <div class="input-group">
-      <label>Circunferência do braço (cm)</label>
+      <label>Braço (cm)</label>
       <input type="number" id="braco" min="10" max="80">
+    </div>
+    <div class="input-group">
+      <label>Perna (cm)</label>
+      <input type="number" id="perna" min="20" max="120">
     </div>
     <div class="input-group">
       <label>Cintura (cm)</label>
       <input type="number" id="cintura" min="30" max="200">
     </div>
-    <div class="input-group">
-      <label>Quadril (cm)</label>
-      <input type="number" id="quadril" min="30" max="200">
-    </div>
-    <button onclick="calcularMassa()">Calcular</button>
-    <div id="resultadoMassa"></div>
+    <button onclick="calcularPrincipal()">Calcular</button>
+    <div id="resultadoPrincipal"></div>
   </section>
 
-  <!-- Plano de Treino -->
+  <!-- Aba Evolução -->
+  <section id="evolucao" class="aba" style="display:none;">
+    <h2>Evolução</h2>
+    <input type="file" accept="image/*" id="uploadFotoEvolucao">
+    <button onclick="adicionarFotoEvolucao()">Adicionar Foto</button>
+    <div class="fotos" id="fotosEvolucao"></div>
+    <h3>Medidas Registradas</h3>
+    <div id="medidasSalvas"></div>
+  </section>
+
+  <!-- Aba Plano de Treino -->
   <section id="treino" class="aba" style="display:none;">
     <h2>Plano de Treino</h2>
     <div class="input-group">
