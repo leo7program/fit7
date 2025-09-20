@@ -1,15 +1,12 @@
 function calcularIMC() {
-    // Pegando os inputs
     let alturaInput = parseFloat(document.getElementById("altura").value);
     let pesoInput = parseFloat(document.getElementById("peso").value);
     let metaInput = parseFloat(document.getElementById("meta").value);
 
-    // Limitar valores
     const altura = isNaN(alturaInput) ? 1 : Math.min(Math.max(alturaInput, 0.5), 2.5);
     const peso = isNaN(pesoInput) ? 30 : Math.min(Math.max(pesoInput, 30), 500);
     const meta = isNaN(metaInput) ? NaN : Math.min(Math.max(metaInput, 30), 500);
 
-    // Atualiza os campos com os valores ajustados
     document.getElementById("altura").value = altura;
     document.getElementById("peso").value = peso;
     if (!isNaN(meta)) document.getElementById("meta").value = meta;
@@ -21,7 +18,6 @@ function calcularIMC() {
 
     const imc = (peso / (altura * altura)).toFixed(2);
 
-    // Classificação IMC
     let classificacao = "", recomendacao = "", dicas = "";
 
     if (imc < 18.5) {
@@ -66,12 +62,10 @@ function calcularIMC() {
         resultado.innerHTML += `<p>${msgMeta}</p>`;
     }
 
-    // Peso ideal
     const pesoMin = (18.5 * altura * altura).toFixed(1);
     const pesoMax = (24.9 * altura * altura).toFixed(1);
     pesoIdealDiv.innerHTML = `<p>Faixa de Peso Ideal: <strong>${pesoMin} kg - ${pesoMax} kg</strong></p>`;
 
-    // Tipo de corpo / shape
     let tipoShape = "";
     if (shape === "atletico") tipoShape = "Foco em definição muscular e resistência.";
     else if (shape === "maromba") tipoShape = "Foco em hipertrofia e ganho de massa muscular.";
@@ -82,7 +76,6 @@ function calcularIMC() {
     tipoShapeDiv.innerHTML = `<p>Objetivo: <strong>${shape}</strong></p><p>${tipoShape}</p>`;
 }
 
-// Galeria de fotos
 function adicionarFoto() {
     const upload = document.getElementById("uploadFoto");
     const fotos = document.getElementById("fotos");
