@@ -3,17 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fitness IMC App</title>
+<title>Fitness App Completo</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>🏋️ Fitness IMC App</h1>
-  </header>
 
-  <!-- Calculadora IMC -->
-  <section class="container">
+<header>
+  <h1>🏋️ Fitness App</h1>
+  <nav>
+    <button onclick="mostrarAba('imc')">IMC & Evolução</button>
+    <button onclick="mostrarAba('massa')">Massa & Gordura</button>
+    <button onclick="mostrarAba('treino')">Plano de Treino</button>
+  </nav>
+</header>
+
+<main>
+  <!-- Aba IMC -->
+  <section id="imc" class="aba">
     <h2>Calculadora IMC</h2>
     <div class="input-group">
       <label for="altura">Altura (m)</label>
@@ -39,24 +46,70 @@
     </div>
     <button type="button" onclick="calcularIMC()">Calcular IMC</button>
     <div class="resultado" id="resultado"></div>
-  </section>
 
-  <!-- Peso ideal e tipo de corpo -->
-  <section class="container">
-    <h2>Peso Ideal & Shape</h2>
+    <h3>Peso Ideal & Shape</h3>
     <div class="peso-ideal" id="pesoIdeal"></div>
     <div class="tipo-shape" id="tipoShape"></div>
-  </section>
 
-  <!-- Galeria de progresso -->
-  <section class="container galeria">
-    <h2>📸 Evolução</h2>
+    <h3>📸 Evolução</h3>
     <div class="fotos" id="fotos"></div>
     <div class="upload">
       <input type="file" accept="image/*" id="uploadFoto">
       <button type="button" onclick="adicionarFoto()">Adicionar Foto</button>
     </div>
   </section>
+
+  <!-- Aba Massa Muscular & Gordura -->
+  <section id="massa" class="aba" style="display:none;">
+    <h2>Massa Muscular & Gordura Corporal</h2>
+    <div class="input-group">
+      <label for="pesoMuscular">Peso (kg)</label>
+      <input type="number" id="pesoMuscular" min="30" max="500" step="0.1">
+    </div>
+    <div class="input-group">
+      <label for="alturaMuscular">Altura (m)</label>
+      <input type="number" id="alturaMuscular" min="0.5" max="2.5" step="0.01" value="1">
+    </div>
+    <div class="input-group">
+      <label for="braco">Circunferência do braço (cm)</label>
+      <input type="number" id="braco" min="10" max="80" step="0.1">
+    </div>
+    <div class="input-group">
+      <label for="cintura">Circunferência da cintura (cm)</label>
+      <input type="number" id="cintura" min="30" max="200" step="0.1">
+    </div>
+    <div class="input-group">
+      <label for="quadril">Circunferência do quadril (cm)</label>
+      <input type="number" id="quadril" min="30" max="200" step="0.1">
+    </div>
+    <button type="button" onclick="calcularMassa()">Calcular Massa & Gordura</button>
+    <div id="resultadoMassa"></div>
+  </section>
+
+  <!-- Aba Plano de Treino -->
+  <section id="treino" class="aba" style="display:none;">
+    <h2>Plano de Treino Personalizado</h2>
+    <div class="input-group">
+      <label for="objetivoTreino">Objetivo/Shape</label>
+      <select id="objetivoTreino">
+        <option value="atletico">Atlético</option>
+        <option value="maromba">Maromba</option>
+        <option value="emagrecer">Emagrecer</option>
+        <option value="manter">Manter</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label for="nivelTreino">Nível de condicionamento</label>
+      <select id="nivelTreino">
+        <option value="iniciante">Iniciante</option>
+        <option value="intermediario">Intermediário</option>
+        <option value="avancado">Avançado</option>
+      </select>
+    </div>
+    <button type="button" onclick="gerarTreino()">Gerar Plano</button>
+    <div id="planoTreino"></div>
+  </section>
+</main>
 
 <script src="script.js"></script>
 </body>
