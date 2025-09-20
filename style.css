@@ -12,7 +12,9 @@ header h1{color:#ff6b6b;}
 .input-card{margin-bottom:12px;display:flex;flex-direction:column;animation:cardAnim 0.4s;}
 @keyframes cardAnim{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 .input-card label{margin-bottom:5px;color:#ffd700;font-weight:500;}
-.input-card input, .input-card select{padding:10px;border-radius:10px;border:none;outline:none;background:#3a3a3a;color:#fff;}
+.input-card input, .input-card select{padding:10px;border-radius:10px;border:none;outline:none;background:#3a3a3a;color:#fff;transition:0.3s;}
+.input-card input.invalid, .input-card select.invalid{border:2px solid red; animation:shake 0.3s;}
+@keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-5px)}100%{transform:translateX(0)}}
 .btn{padding:12px;border:none;border-radius:12px;background:#ff6b6b;color:#fff;font-weight:600;margin-top:8px;cursor:pointer;transition:0.3s;}
 .btn:hover{background:#ff5252;}
 .resultado{margin-top:15px;background:rgba(255,255,255,0.05);padding:10px;border-radius:10px;animation:cardAnim 0.4s;}
