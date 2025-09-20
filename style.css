@@ -1,0 +1,95 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #6c63ff, #00c9a7);
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+.container {
+  width: 90%;
+  max-width: 450px;
+  background: rgba(255,255,255,0.1);
+  padding: 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  margin: 20px 0;
+}
+h2, h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+button {
+  background: #00c9a7;
+  color: white;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+button:hover {
+  background: #06b596;
+}
+.resultado {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.2);
+  font-size: 14px;
+}
+.progress-bar {
+  margin-top: 15px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+  overflow: hidden;
+  height: 18px;
+}
+.progress {
+  background: #00ff95;
+  height: 100%;
+  width: 0%;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+}
+.galeria {
+  margin-top: 20px;
+}
+.fotos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.fotos img {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  height: 150px;
+}
+.upload {
+  margin-top: 10px;
+  text-align: center;
+}
+.motivacao {
+  margin-top: 20px;
+  text-align: center;
+  font-style: italic;
+  font-size: 14px;
+}
