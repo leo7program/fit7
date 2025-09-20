@@ -1,27 +1,46 @@
 body {
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #6c63ff, #00c9a7);
+  background: linear-gradient(135deg, #1c1c1c, #2e2e2e);
   color: #fff;
   margin: 0;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 100vh;
+}
+
+/* Leve padrão geométrico sutil */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
 }
 
 h1, h2 {
   text-align: center;
+  z-index: 1;
+  position: relative;
 }
 
 .container {
   width: 90%;
   max-width: 450px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
   padding: 20px;
   border-radius: 20px;
   backdrop-filter: blur(10px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
   margin: 20px 0;
+  z-index: 1;
+  position: relative;
 }
 
 input, select, button {
@@ -35,7 +54,7 @@ input, select, button {
 }
 
 button {
-  background: #00c9a7;
+  background: #ff6b6b;
   color: white;
   font-weight: bold;
   cursor: pointer;
@@ -43,33 +62,15 @@ button {
 }
 
 button:hover {
-  background: #06b596;
+  background: #ff5252;
 }
 
 .resultado, .peso-ideal, .tipo-shape {
   margin-top: 15px;
   padding: 12px;
   border-radius: 12px;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
   font-size: 14px;
-}
-
-.progress-bar {
-  margin-top: 15px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 20px;
-  overflow: hidden;
-  height: 18px;
-}
-
-.progress {
-  background: #00ff95;
-  height: 100%;
-  width: 0%;
-  text-align: center;
-  font-size: 12px;
-  font-weight: bold;
-  color: #333;
 }
 
 .galeria .fotos {
