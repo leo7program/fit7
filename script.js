@@ -1,6 +1,9 @@
 function calcularIMC() {
+    let alturaInput = parseFloat(document.getElementById("altura").value);
+    // Limita altura entre 0.5 e 2.5
+    const altura = Math.min(Math.max(alturaInput, 0.5), 2.5);
+
     const peso = parseFloat(document.getElementById("peso").value);
-    const altura = parseFloat(document.getElementById("altura").value);
     const meta = parseFloat(document.getElementById("meta").value);
     const shape = document.getElementById("shape").value;
 
@@ -8,7 +11,7 @@ function calcularIMC() {
     const pesoIdealDiv = document.getElementById("pesoIdeal");
     const tipoShapeDiv = document.getElementById("tipoShape");
 
-    if (isNaN(peso) || isNaN(altura)) {
+    if (isNaN(peso)) {
         alert("Insira valores válidos.");
         return;
     }
@@ -76,7 +79,7 @@ function calcularIMC() {
     tipoShapeDiv.innerHTML = `<p>Objetivo: <strong>${shape}</strong></p><p>${tipoShape}</p>`;
 }
 
-// Função para adicionar fotos da galeria
+// Galeria de fotos
 function adicionarFoto() {
     const upload = document.getElementById("uploadFoto");
     const fotos = document.getElementById("fotos");
