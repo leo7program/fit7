@@ -1,10 +1,16 @@
 function calcularIMC() {
+    // Altura limitada
     let alturaInput = parseFloat(document.getElementById("altura").value);
-    // Limita altura entre 0.5 e 2.5
     const altura = Math.min(Math.max(alturaInput, 0.5), 2.5);
 
-    const peso = parseFloat(document.getElementById("peso").value);
-    const meta = parseFloat(document.getElementById("meta").value);
+    // Peso limitado
+    let pesoInput = parseFloat(document.getElementById("peso").value);
+    const peso = Math.min(Math.max(pesoInput, 30), 500);
+
+    // Peso meta limitado
+    let metaInput = parseFloat(document.getElementById("meta").value);
+    const meta = isNaN(metaInput) ? NaN : Math.min(Math.max(metaInput, 30), 500);
+
     const shape = document.getElementById("shape").value;
 
     const resultado = document.getElementById("resultado");
