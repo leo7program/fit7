@@ -10,6 +10,7 @@
 <body>
   <h1>🏋️ Fitness IMC App</h1>
 
+  <!-- Calculadora IMC -->
   <div class="container">
     <h2>Calculadora IMC</h2>
     <input type="number" id="altura" placeholder="Altura (m)">
@@ -23,19 +24,17 @@
       <option value="manter">Manter</option>
     </select>
     <button onclick="calcularIMC()">Calcular IMC</button>
-
     <div class="resultado" id="resultado"></div>
-    <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-    </div>
   </div>
 
+  <!-- Peso ideal e tipo de corpo -->
   <div class="container">
     <h2>Peso Ideal & Shape</h2>
     <div class="peso-ideal" id="pesoIdeal"></div>
     <div class="tipo-shape" id="tipoShape"></div>
   </div>
 
+  <!-- Galeria de progresso -->
   <div class="container galeria">
     <h2>📸 Evolução</h2>
     <div class="fotos" id="fotos"></div>
