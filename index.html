@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,19 +27,19 @@
     <!-- Aba Principal -->
     <section id="principal" class="tab active">
       <h2>Calculadora Fitness</h2>
-      <div class="input-card">
+      <div class="card input-card">
         <label>Altura (m)</label>
         <input type="number" id="altura" min="0.5" max="2.5" step="0.01" value="1.70">
       </div>
-      <div class="input-card">
+      <div class="card input-card">
         <label>Peso (kg)</label>
         <input type="number" id="peso" min="30" max="500" step="0.1">
       </div>
-      <div class="input-card">
+      <div class="card input-card">
         <label>Peso Meta (kg)</label>
         <input type="number" id="meta" min="30" max="500" step="0.1">
       </div>
-      <div class="input-card">
+      <div class="card input-card">
         <label>Objetivo</label>
         <select id="shape">
           <option value="definir">Escolher</option>
@@ -48,39 +49,40 @@
           <option value="manter">Manter</option>
         </select>
       </div>
-      <div class="input-card">
+      <div class="card input-card">
         <label>Braço (cm)</label>
         <input type="number" id="braco" min="10" max="80">
       </div>
-      <div class="input-card">
+      <div class="card input-card">
         <label>Perna (cm)</label>
         <input type="number" id="perna" min="20" max="120">
       </div>
-      <div class="input-card">
+      <div class="card input-card">
         <label>Cintura (cm)</label>
         <input type="number" id="cintura" min="30" max="200">
       </div>
       <button class="btn" onclick="calcularPrincipal()">Calcular</button>
-      <div id="resultadoPrincipal" class="resultado"></div>
+      <div id="resultadoPrincipal" class="resultado card"></div>
+      <canvas id="graficoIMC" style="margin-top:15px;"></canvas>
     </section>
 
     <!-- Aba Evolução -->
     <section id="evolucao" class="tab">
       <h2>Evolução</h2>
-      <div class="input-card">
+      <div class="card input-card">
         <label>Adicionar foto de evolução</label>
         <input type="file" id="uploadFotoEvolucao" accept="image/*">
         <button class="btn" onclick="adicionarFotoEvolucao()">Adicionar Foto</button>
       </div>
       <div class="fotos" id="fotosEvolucao"></div>
       <h3>Medidas Salvas</h3>
-      <div id="medidasSalvas"></div>
+      <div id="medidasSalvas" class="card"></div>
     </section>
 
     <!-- Aba Treino -->
     <section id="treino" class="tab">
       <h2>Plano de Treino</h2>
-      <div class="input-card">
+      <div class="card input-card">
         <label>Objetivo</label>
         <select id="objetivoTreino">
           <option value="atletico">Atlético</option>
@@ -89,7 +91,7 @@
           <option value="manter">Manter</option>
         </select>
       </div>
-      <div class="input-card">
+      <div class="card input-card">
         <label>Nível</label>
         <select id="nivelTreino">
           <option value="iniciante">Iniciante</option>
@@ -98,8 +100,8 @@
         </select>
       </div>
       <button class="btn" onclick="gerarTreino()">Gerar Treino</button>
-      <div id="planoTreino" class="resultado"></div>
-      <div id="recomendacaoAlimentacao" class="resultado"></div>
+      <div id="planoTreino" class="resultado card"></div>
+      <div id="recomendacaoAlimentacao" class="resultado card"></div>
       <button class="btn" onclick="gerarPDFProfissional()">Gerar PDF Profissional</button>
     </section>
   </main>
