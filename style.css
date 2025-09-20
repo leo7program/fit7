@@ -1,4 +1,3 @@
-/* Fonte e fundo */
 body {
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(135deg, #1c1c1c, #2e2e2e);
@@ -11,12 +10,10 @@ body {
   min-height: 100vh;
 }
 
-/* Cabeçalhos */
 h1, h2 {
   text-align: center;
 }
 
-/* Containers dos cards */
 .container {
   width: 90%;
   max-width: 450px;
@@ -27,7 +24,6 @@ h1, h2 {
   margin: 20px 0;
 }
 
-/* Inputs, selects e botões */
 input, select, button {
   width: 100%;
   padding: 12px;
@@ -51,7 +47,6 @@ button:hover {
   background: #ff5252;
 }
 
-/* Resultados e cards internos */
 .resultado, .peso-ideal, .tipo-shape {
   margin-top: 15px;
   padding: 12px;
@@ -60,7 +55,6 @@ button:hover {
   font-size: 14px;
 }
 
-/* Galeria de fotos */
 .galeria .fotos {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -74,7 +68,6 @@ button:hover {
   height: 150px;
 }
 
-/* Upload de fotos */
 .upload {
   display: flex;
   flex-direction: column;
