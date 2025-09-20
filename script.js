@@ -9,17 +9,32 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
   });
 });
 
-let historicoIMC = [];
+let historicoIMC=[];
 let grafico;
 
+// Validação campos principal
+function validarCampos(){
+  const campos=document.querySelectorAll('#principal input, #principal select');
+  let valido=true;
+  campos.forEach(c=>{
+    if(c.value===''){
+      c.classList.add('invalid');
+      valido=false;
+      setTimeout(()=>c.classList.remove('invalid'),300);
+    }
+  });
+  return valido;
+}
+
 function calcularPrincipal(){
-  const altura=parseFloat(document.getElementById("altura").value)||1;
-  const peso=parseFloat(document.getElementById("peso").value)||30;
-  const meta=parseFloat(document.getElementById("meta").value)||NaN;
-  const shape=document.getElementById("shape").value;
-  const braco=parseFloat(document.getElementById("braco").value)||30;
-  const perna=parseFloat(document.getElementById("perna").value)||50;
-  const cintura=parseFloat(document.getElementById("cintura").value)||70;
+  if(!validarCampos()) return;
+
+  const altura=parseFloat(document.getElementById("altura").value);
+  const peso=parseFloat(document.getElementById("peso").value);
+  const meta=parseFloat(document.getElementById("meta").value);
+  const braco=parseFloat(document.getElementById("braco").value);
+  const perna=parseFloat(document.getElementById("perna").value);
+  const cintura=parseFloat(document.getElementById("cintura").value);
 
   const imc=(peso/(altura*altura)).toFixed(2);
   const gordura=(1.2*imc)+(0.23*25)-5.4;
@@ -31,13 +46,11 @@ function calcularPrincipal(){
   else if(imc<29.9) classificacao="Sobrepeso";
   else classificacao="Obesidade";
 
+  const dif=(peso-meta).toFixed(1);
   let msg="";
-  if(!isNaN(meta)){
-    const dif=(peso-meta).toFixed(1);
-    if(dif>0) msg=`Precisa perder ${dif} kg para meta.`;
-    else if(dif<0) msg=`Precisa ganhar ${Math.abs(dif)} kg para meta.`;
-    else msg="Você está na meta!";
-  }
+  if(dif>0) msg=`Precisa perder ${dif} kg para meta.`;
+  else if(dif<0) msg=`Precisa ganhar ${Math.abs(dif)} kg para meta.`;
+  else msg="Você está na meta!";
 
   document.getElementById("resultadoPrincipal").innerHTML=
     `<p>IMC: ${imc} (${classificacao})</p>
@@ -45,9 +58,7 @@ function calcularPrincipal(){
      <p>% Gordura: ${gordura.toFixed(1)}%</p>
      <p>${msg}</p>`;
 
-  const medidas=document.getElementById("medidasSalvas");
-  medidas.innerHTML+=`<p>Peso:${peso}kg | Braço:${braco}cm | Perna:${perna}cm | Cintura:${cintura}cm | Meta:${meta}kg | Objetivo:${shape}</p>`;
-
+  // Atualiza gráfico
   historicoIMC.push(parseFloat(imc));
   if(grafico) grafico.destroy();
   const ctx=document.getElementById('graficoIMC').getContext('2d');
@@ -57,12 +68,19 @@ function calcularPrincipal(){
       labels:historicoIMC.map((_,i)=>i+1),
       datasets:[{label:'IMC',data:historicoIMC,borderColor:'#ff6b6b',fill:false,tension:0.3}]
     },
-    options:{
-      responsive:true,
-      plugins:{legend:{labels:{color:'#fff'}}},
-      scales:{y:{beginAtZero:true,color:'#fff'},x:{color:'#fff'}}
-    }
+    options:{responsive:true,plugins:{legend:{labels:{color:'#fff'}}},scales:{y:{beginAtZero:true,color:'#fff'},x:{color:'#fff'}}}
   });
+}
+
+// Evolução com validação
+function validarEvolucao(){
+  const upload=document.getElementById("uploadFotoEvolucao");
+  if(!upload.files || !upload.files[0]){
+    upload.classList.add('invalid');
+    setTimeout(()=>upload.classList.remove('invalid'),300);
+    return;
+  }
+  adicionarFotoEvolucao();
 }
 
 function adicionarFotoEvolucao(){
@@ -79,10 +97,31 @@ function adicionarFotoEvolucao(){
   }
 }
 
+// Validação Treino
+function validarTreino(){
+  const objetivo=document.getElementById("objetivoTreino");
+  const nivel=document.getElementById("nivelTreino");
+  let valido=true;
+
+  if(objetivo.value===""){
+    objetivo.classList.add('invalid');
+    valido=false;
+    setTimeout(()=>objetivo.classList.remove('invalid'),300);
+  }
+  if(nivel.value===""){
+    nivel.classList.add('invalid');
+    valido=false;
+    setTimeout(()=>nivel.classList.remove('invalid'),300);
+  }
+  if(!valido) return;
+  gerarTreino();
+}
+
 function gerarTreino(){
   const objetivo=document.getElementById("objetivoTreino").value;
   const nivel=document.getElementById("nivelTreino").value;
   let plano="";
+
   if(objetivo==="atletico") plano="3x musculação + 2x cardio leve";
   else if(objetivo==="maromba") plano="5x musculação intensa + 2x cardio";
   else if(objetivo==="emagrecer") plano="3x musculação + 4x HIIT";
@@ -92,6 +131,7 @@ function gerarTreino(){
   document.getElementById("recomendacaoAlimentacao").innerText="Comer proteínas magras, legumes e hidratar-se bem.";
 }
 
+// Gerar PDF
 function gerarPDFProfissional(){
   html2canvas(document.querySelector('.app-container')).then(canvas=>{
     const imgData = canvas.toDataURL('image/png');
