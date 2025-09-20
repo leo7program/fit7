@@ -3,12 +3,16 @@ body {
   background: linear-gradient(135deg, #6c63ff, #00c9a7);
   color: #fff;
   margin: 0;
-  padding: 0;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
 }
+
+h1, h2 {
+  text-align: center;
+}
+
 .container {
   width: 90%;
   max-width: 450px;
@@ -19,11 +23,8 @@ body {
   box-shadow: 0 8px 25px rgba(0,0,0,0.2);
   margin: 20px 0;
 }
-h2, h3 {
-  text-align: center;
-  margin-bottom: 15px;
-}
-input, select {
+
+input, select, button {
   width: 100%;
   padding: 12px;
   margin: 8px 0;
@@ -32,27 +33,27 @@ input, select {
   outline: none;
   font-size: 14px;
 }
+
 button {
   background: #00c9a7;
   color: white;
-  border: none;
-  padding: 12px;
-  width: 100%;
-  border-radius: 12px;
-  cursor: pointer;
   font-weight: bold;
+  cursor: pointer;
   transition: 0.3s;
 }
+
 button:hover {
   background: #06b596;
 }
-.resultado {
+
+.resultado, .peso-ideal, .tipo-shape {
   margin-top: 15px;
   padding: 12px;
   border-radius: 12px;
   background: rgba(255,255,255,0.2);
   font-size: 14px;
 }
+
 .progress-bar {
   margin-top: 15px;
   background: rgba(255,255,255,0.2);
@@ -60,6 +61,7 @@ button:hover {
   overflow: hidden;
   height: 18px;
 }
+
 .progress {
   background: #00ff95;
   height: 100%;
@@ -69,27 +71,16 @@ button:hover {
   font-weight: bold;
   color: #333;
 }
-.galeria {
-  margin-top: 20px;
-}
-.fotos {
+
+.galeria .fotos {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
-.fotos img {
+
+.galeria .fotos img {
   width: 100%;
   border-radius: 12px;
   object-fit: cover;
   height: 150px;
-}
-.upload {
-  margin-top: 10px;
-  text-align: center;
-}
-.motivacao {
-  margin-top: 20px;
-  text-align: center;
-  font-style: italic;
-  font-size: 14px;
 }
