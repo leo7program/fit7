@@ -12,30 +12,30 @@
 <header>
   <h1>🏋️ Fitness App</h1>
   <nav>
-    <button onclick="mostrarAba('imc')">IMC & Evolução</button>
+    <button onclick="mostrarAba('imc')">IMC</button>
     <button onclick="mostrarAba('massa')">Massa & Gordura</button>
     <button onclick="mostrarAba('treino')">Plano de Treino</button>
   </nav>
 </header>
 
 <main>
-  <!-- Aba IMC -->
+  <!-- IMC -->
   <section id="imc" class="aba">
     <h2>Calculadora IMC</h2>
     <div class="input-group">
-      <label for="altura">Altura (m)</label>
+      <label>Altura (m)</label>
       <input type="number" id="altura" value="1" min="0.5" max="2.5" step="0.01">
     </div>
     <div class="input-group">
-      <label for="peso">Peso atual (kg)</label>
+      <label>Peso (kg)</label>
       <input type="number" id="peso" min="30" max="500" step="0.1">
     </div>
     <div class="input-group">
-      <label for="meta">Peso meta (kg)</label>
+      <label>Peso Meta (kg)</label>
       <input type="number" id="meta" min="30" max="500" step="0.1">
     </div>
     <div class="input-group">
-      <label for="shape">Objetivo/Shape</label>
+      <label>Objetivo</label>
       <select id="shape">
         <option value="definir">Escolher</option>
         <option value="atletico">Atlético</option>
@@ -44,53 +44,46 @@
         <option value="manter">Manter</option>
       </select>
     </div>
-    <button type="button" onclick="calcularIMC()">Calcular IMC</button>
-    <div class="resultado" id="resultado"></div>
-
-    <h3>Peso Ideal & Shape</h3>
-    <div class="peso-ideal" id="pesoIdeal"></div>
-    <div class="tipo-shape" id="tipoShape"></div>
-
+    <button onclick="calcularIMC()">Calcular IMC</button>
+    <div id="resultado"></div>
     <h3>📸 Evolução</h3>
     <div class="fotos" id="fotos"></div>
-    <div class="upload">
-      <input type="file" accept="image/*" id="uploadFoto">
-      <button type="button" onclick="adicionarFoto()">Adicionar Foto</button>
-    </div>
+    <input type="file" accept="image/*" id="uploadFoto">
+    <button onclick="adicionarFoto()">Adicionar Foto</button>
   </section>
 
-  <!-- Aba Massa Muscular & Gordura -->
+  <!-- Massa muscular & Gordura -->
   <section id="massa" class="aba" style="display:none;">
-    <h2>Massa Muscular & Gordura Corporal</h2>
+    <h2>Massa Muscular & Gordura</h2>
     <div class="input-group">
-      <label for="pesoMuscular">Peso (kg)</label>
-      <input type="number" id="pesoMuscular" min="30" max="500" step="0.1">
+      <label>Peso (kg)</label>
+      <input type="number" id="pesoMuscular" min="30" max="500">
     </div>
     <div class="input-group">
-      <label for="alturaMuscular">Altura (m)</label>
-      <input type="number" id="alturaMuscular" min="0.5" max="2.5" step="0.01" value="1">
+      <label>Altura (m)</label>
+      <input type="number" id="alturaMuscular" min="0.5" max="2.5" value="1">
     </div>
     <div class="input-group">
-      <label for="braco">Circunferência do braço (cm)</label>
-      <input type="number" id="braco" min="10" max="80" step="0.1">
+      <label>Circunferência do braço (cm)</label>
+      <input type="number" id="braco" min="10" max="80">
     </div>
     <div class="input-group">
-      <label for="cintura">Circunferência da cintura (cm)</label>
-      <input type="number" id="cintura" min="30" max="200" step="0.1">
+      <label>Cintura (cm)</label>
+      <input type="number" id="cintura" min="30" max="200">
     </div>
     <div class="input-group">
-      <label for="quadril">Circunferência do quadril (cm)</label>
-      <input type="number" id="quadril" min="30" max="200" step="0.1">
+      <label>Quadril (cm)</label>
+      <input type="number" id="quadril" min="30" max="200">
     </div>
-    <button type="button" onclick="calcularMassa()">Calcular Massa & Gordura</button>
+    <button onclick="calcularMassa()">Calcular</button>
     <div id="resultadoMassa"></div>
   </section>
 
-  <!-- Aba Plano de Treino -->
+  <!-- Plano de Treino -->
   <section id="treino" class="aba" style="display:none;">
-    <h2>Plano de Treino Personalizado</h2>
+    <h2>Plano de Treino</h2>
     <div class="input-group">
-      <label for="objetivoTreino">Objetivo/Shape</label>
+      <label>Objetivo</label>
       <select id="objetivoTreino">
         <option value="atletico">Atlético</option>
         <option value="maromba">Maromba</option>
@@ -99,18 +92,21 @@
       </select>
     </div>
     <div class="input-group">
-      <label for="nivelTreino">Nível de condicionamento</label>
+      <label>Nível</label>
       <select id="nivelTreino">
         <option value="iniciante">Iniciante</option>
         <option value="intermediario">Intermediário</option>
         <option value="avancado">Avançado</option>
       </select>
     </div>
-    <button type="button" onclick="gerarTreino()">Gerar Plano</button>
+    <button onclick="gerarTreino()">Gerar Treino</button>
+    <button onclick="gerarPDF()">Gerar PDF</button>
     <div id="planoTreino"></div>
+    <div id="recomendacaoAlimentacao"></div>
   </section>
 </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
