@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitness IMC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>📊 Fitness IMC</h2>
+    <input type="number" id="altura" placeholder="Altura (m)">
+    <input type="number" id="peso" placeholder="Peso atual (kg)">
+    <input type="number" id="meta" placeholder="Peso meta (kg)">
+    <select id="shape">
+      <option value="definir">Definir</option>
+      <option value="atletico">Atlético</option>
+      <option value="maromba">Maromba</option>
+      <option value="emagrecer">Emagrecer</option>
+      <option value="manter">Manter</option>
+    </select>
+    <button onclick="calcularIMC()">Calcular</button>
+    <div class="resultado" id="resultado"></div>
+    <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+    </div>
+    <div class="motivacao" id="motivacao"></div>
+  </div>
+
+  <div class="container galeria">
+    <h3>📸 Sua evolução</h3>
+    <div class="fotos" id="fotos"></div>
+    <div class="upload">
+      <input type="file" accept="image/*" id="uploadFoto">
+      <button onclick="adicionarFoto()">Adicionar Foto</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
