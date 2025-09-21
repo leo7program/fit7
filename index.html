@@ -3,127 +3,185 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fitness App</title>
+  <title>Fitness App — Completo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- ---------- Header ---------- -->
-  <header>
-    <h1>Fitness App</h1>
-    <nav class="nav">
-      <button class="nav-btn active" data-tab="tab-imc">IMC</button>
-      <button class="nav-btn" data-tab="tab-evolucao">Evolução</button>
-      <button class="nav-btn" data-tab="tab-treino">Treino</button>
-      <button class="nav-btn" data-tab="tab-relatorio">Relatório</button>
-      <button class="nav-btn" id="profileBtn">Perfil</button>
-    </nav>
+<div class="app">
+  <!-- Header -->
+  <header class="app-header">
+    <div class="left">
+      <h1>Fitness App</h1>
+      <small id="app-tag">Calculadora • Treinos • Evolução</small>
+    </div>
+    <div class="right">
+      <button id="profileBtn" class="icon-btn">Perfil</button>
+    </div>
   </header>
 
-  <!-- ---------- Tabs ---------- -->
-  <section id="tab-imc" class="tab active">
-    <h2>Calculadora Fitness</h2>
-    <label>Altura (m)</label>
-    <input type="number" id="altura" placeholder="Ex: 1.80">
-    <label>Peso (kg)</label>
-    <input type="number" id="peso" placeholder="Ex: 80">
-    <label>Peso meta (kg)</label>
-    <input type="number" id="meta" placeholder="Ex: 75">
-    <label>Braço (cm)</label>
-    <input type="number" id="braco" placeholder="Ex: 40">
-    <label>Perna (cm)</label>
-    <input type="number" id="perna" placeholder="Ex: 60">
-    <label>Cintura (cm)</label>
-    <input type="number" id="cintura" placeholder="Ex: 85">
-    <label>Idade</label>
-    <input type="number" id="idade" placeholder="Ex: 28">
-    <label>Sexo</label>
-    <select id="sexo">
-      <option value="">Escolher</option>
-      <option value="male">Masculino</option>
-      <option value="female">Feminino</option>
-    </select>
-    <label>Objetivo</label>
-    <select id="objetivo">
-      <option value="manter">Manter</option>
-      <option value="emagrecer">Emagrecer</option>
-      <option value="ganhar">Ganho de massa</option>
-      <option value="definir">Definição</option>
-    </select>
+  <!-- Navigation Tabs -->
+  <nav class="main-nav">
+    <button class="nav-btn active" data-tab="tab-imc">IMC</button>
+    <button class="nav-btn" data-tab="tab-evolucao">Evolução</button>
+    <button class="nav-btn" data-tab="tab-treino">Treino</button>
+    <button class="nav-btn" data-tab="tab-relatorio">Relatório</button>
+  </nav>
 
-    <button id="calcBtn">Calcular</button>
-    <button id="saveSnapshot">Salvar Medidas</button>
+  <!-- Main Content -->
+  <main class="main-content">
 
-    <div id="resultadoBox"></div>
-  </section>
+    <!-- TAB IMC -->
+    <section id="tab-imc" class="tab active">
+      <div class="card">
+        <h2>Calculadora Fitness</h2>
+        <div class="row">
+          <div class="col"><label>Altura (m)</label><input id="altura" type="number" min="0.5" max="2.5" step="0.01"></div>
+          <div class="col"><label>Peso (kg)</label><input id="peso" type="number" min="30" max="500" step="0.1"></div>
+          <div class="col"><label>Peso Meta (kg)</label><input id="meta" type="number" min="30" max="500" step="0.1"></div>
+        </div>
+        <div class="row">
+          <div class="col"><label>Braço (cm)</label><input id="braco" type="number" min="10" max="80"></div>
+          <div class="col"><label>Perna (cm)</label><input id="perna" type="number" min="20" max="120"></div>
+          <div class="col"><label>Cintura (cm)</label><input id="cintura" type="number" min="30" max="200"></div>
+        </div>
+        <div class="row">
+          <div class="col"><label>Idade</label><input id="idade" type="number" min="10" max="100"></div>
+          <div class="col"><label>Sexo</label>
+            <select id="sexo">
+              <option value="">Escolher</option>
+              <option value="male">Masculino</option>
+              <option value="female">Feminino</option>
+            </select>
+          </div>
+          <div class="col"><label>Objetivo</label>
+            <select id="objetivo">
+              <option value="manter">Manter</option>
+              <option value="emagrecer">Emagrecer</option>
+              <option value="ganhar">Ganho de massa</option>
+              <option value="definir">Definir</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="calcBtn">Calcular</button>
+          <button class="btn" id="saveSnapshot">Salvar Medidas</button>
+          <button class="btn" id="exportCSV">Export CSV</button>
+        </div>
+        <div id="resultadoBox" class="resultado"></div>
+      </div>
+      <div class="card">
+        <h3>Histórico de IMC</h3>
+        <canvas id="chartIMC" height="120"></canvas>
+      </div>
+    </section>
 
-  <section id="tab-evolucao" class="tab">
-    <h2>Galeria de Evolução</h2>
-    <input type="file" id="uploadFotoEvolucao" accept="image/*">
-    <button id="addFotoBtn">Adicionar Foto</button>
-    <button id="clearPhotos">Limpar Fotos</button>
-    <div id="gallery"></div>
-  </section>
+    <!-- TAB EVOLUÇÃO -->
+    <section id="tab-evolucao" class="tab">
+      <div class="card">
+        <h2>Galeria Evolução</h2>
+        <div class="row">
+          <div class="col">
+            <input id="uploadFotoEvolucao" type="file" accept="image/*">
+            <button class="btn" id="addFotoBtn">Adicionar Foto</button>
+          </div>
+          <div class="col rightcol">
+            <button class="btn" id="clearPhotos">Limpar Tudo</button>
+          </div>
+        </div>
+        <div id="gallery" class="gallery"></div>
+      </div>
+    </section>
 
-  <section id="tab-treino" class="tab">
-    <h2>Plano de Treino</h2>
-    <label>Preset Famoso</label>
-    <select id="presetTreino">
-      <option value="">Nenhum</option>
-      <option value="ramon">Ramon Dino</option>
-      <option value="cbum">Chris Bumstead (CBum)</option>
-      <option value="arnold">Arnold</option>
-    </select>
-    <label>Grupo Muscular</label>
-    <select id="grupoMuscular">
-      <option value="">Escolher</option>
-      <option value="costas">Costas</option>
-      <option value="perna">Pernas</option>
-      <option value="peito">Peito</option>
-      <option value="braco">Braços</option>
-    </select>
-    <label>Nível</label>
-    <select id="nivel">
-      <option value="iniciante">Iniciante</option>
-      <option value="intermediario">Intermediário</option>
-      <option value="avancado">Avançado</option>
-    </select>
-    <button id="genTreino">Gerar Treino</button>
-    <div id="treinoOutput"></div>
-  </section>
+    <!-- TAB TREINO -->
+    <section id="tab-treino" class="tab">
+      <div class="card">
+        <h2>Plano de Treino</h2>
+        <div class="row">
+          <div class="col"><label>Preset</label>
+            <select id="presetTreino">
+              <option value="">Nenhum</option>
+              <option value="ramon">Ramon Dino</option>
+              <option value="cbum">Chris Bumstead</option>
+              <option value="arnold">Arnold</option>
+            </select>
+          </div>
+          <div class="col"><label>Grupo Muscular</label>
+            <select id="grupoMuscular">
+              <option value="">Escolher</option>
+              <option value="costas">Costas</option>
+              <option value="perna">Pernas</option>
+              <option value="peito">Peito</option>
+              <option value="braco">Braços</option>
+            </select>
+          </div>
+          <div class="col"><label>Nível</label>
+            <select id="nivel">
+              <option value="iniciante">Iniciante</option>
+              <option value="intermediario">Intermediário</option>
+              <option value="avancado">Avançado</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="genTreino">Gerar Treino</button>
+          <button class="btn" id="exportPDF">Exportar PDF</button>
+        </div>
+        <div id="treinoOutput" class="resultado"></div>
+      </div>
+    </section>
 
-  <section id="tab-relatorio" class="tab">
-    <h2>Relatório & Perfil</h2>
-    <button id="downloadJSON">Exportar JSON</button>
-    <button id="importJSON">Importar JSON</button>
-  </section>
+    <!-- TAB RELATÓRIO -->
+    <section id="tab-relatorio" class="tab">
+      <div class="card">
+        <h2>Relatório & Perfil</h2>
+        <div class="row">
+          <div class="col">
+            <button class="btn primary" id="exportPDFFull">Exportar PDF Completo</button>
+          </div>
+          <div class="col">
+            <button class="btn" id="downloadJSON">Exportar JSON</button>
+          </div>
+          <div class="col">
+            <button class="btn" id="importJSON">Importar JSON</button>
+            <input id="fileImport" type="file" class="hidden">
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <!-- ---------- Profile Modal ---------- -->
-  <div id="profileModal" class="hidden">
-    <div class="modal-content">
+  </main>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox hidden" onclick="closeLightbox()">
+    <img id="lightboxImg" src="">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  </div>
+
+  <!-- Profile Modal -->
+  <div id="profileModal" class="modal hidden">
+    <div class="modal-card">
       <h3>Perfil</h3>
-      <input type="text" id="profileName" placeholder="Nome">
-      <input type="number" id="profileAge" placeholder="Idade">
+      <label>Nome</label><input id="profileName" type="text">
+      <label>Idade</label><input id="profileAge" type="number">
+      <label>Sexo</label>
       <select id="profileSex">
         <option value="">Escolher</option>
         <option value="male">Masculino</option>
         <option value="female">Feminino</option>
       </select>
-      <button id="saveProfile">Salvar</button>
-      <button id="closeProfile">Fechar</button>
+      <div class="actions">
+        <button class="btn primary" id="saveProfile">Salvar</button>
+        <button class="btn" id="closeProfile">Fechar</button>
+      </div>
     </div>
   </div>
 
-  <!-- ---------- Lightbox ---------- -->
-  <div id="lightbox" class="hidden" onclick="closeLightbox()">
-    <img id="lightboxImg" src="">
-  </div>
+</div>
 
-  <!-- ---------- Footer ---------- -->
-  <footer>Desenvolvido por leo7ocean</footer>
-
-  <!-- ---------- JS ---------- -->
-  <script src="script.js"></script>
-
+<script src="script.js"></script>
 </body>
 </html>
