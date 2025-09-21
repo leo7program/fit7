@@ -1,9 +1,9 @@
 /* RESET E BASE */
-* { margin:0; padding:0; box-sizing:border-box; font-family: 'Arial', sans-serif; }
-body { background: #1a1a1a; color: #fff; min-height:100vh; }
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Arial', sans-serif; }
+body { background:#1e1e1e; color:#fff; min-height:100vh; }
 header { text-align:center; padding:20px; background:#222; }
-header h1 { color: #ff8c00; }
-nav { margin-top:15px; }
+header h1 { color:#ff8c00; }
+nav { margin-top:10px; }
 nav button { padding:10px 15px; margin:0 5px; border:none; border-radius:5px; background:#333; color:#fff; cursor:pointer; }
 nav button.active { background:#ff8c00; color:#000; font-weight:bold; }
 
@@ -15,10 +15,15 @@ main { padding:20px; max-width:900px; margin:0 auto; }
 .col label { display:block; margin-bottom:5px; font-weight:bold; }
 .col input, .col select { width:100%; padding:8px; border-radius:5px; border:none; background:#333; color:#fff; }
 .col input.invalid, .col select.invalid { border:2px solid red; animation:shake 0.3s; }
-@keyframes shake { 0%{transform:translateX(-5px);} 50%{transform:translateX(5px);} 100%{transform:translateX(0);} }
+@keyframes shake { 0%{transform:translateX(-5px);}50%{transform:translateX(5px);}100%{transform:translateX(0);} }
 
-button { padding:10px 15px; border:none; border-radius:5px; background:#ff8c00; color:#000; cursor:pointer; margin-top:10px; }
-#resultado { margin-top:20px; font-size:1.2rem; }
+button { padding:10px 15px; border:none; border-radius:5px; background:#ff8c00; color:#000; cursor:pointer; margin-top:10px; transition:0.2s; }
+button:hover { background:#ffa500; }
+
+#resultado, #recomendacoes, #treinoResultado { margin-top:20px; font-size:1.2rem; }
+
 #galeria { display:flex; flex-wrap:wrap; gap:10px; margin-top:15px; }
-#galeria img { width:150px; height:150px; object-fit:cover; border-radius:10px; cursor:pointer; }
+#galeria img { width:150px; height:150px; object-fit:cover; border-radius:10px; cursor:pointer; transition:0.3s; }
 img.enlarged { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:80%; height:auto; z-index:1000; border:3px solid #ff8c00; border-radius:10px; }
+
+footer { text-align:center; padding:15px; color:#aaa; margin-top:20px; font-size:0.9rem; }
