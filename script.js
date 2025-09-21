@@ -3,16 +3,19 @@ console.log("script carregado");
 // Troca de abas
 const tabs=document.querySelectorAll('.tab-btn');
 const sections=document.querySelectorAll('.tab');
+function abrirTab(nome){
+  tabs.forEach(b=>b.classList.remove('active'));
+  sections.forEach(s=>s.classList.remove('active'));
+  document.querySelector(`[data-tab="${nome}"]`).classList.add('active');
+  document.getElementById(nome).classList.add('active');
+}
 tabs.forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    tabs.forEach(b=>b.classList.remove('active'));
-    sections.forEach(s=>s.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById(btn.dataset.tab).classList.add('active');
-  });
+  btn.addEventListener('click',()=>abrirTab(btn.dataset.tab));
 });
 
 // ===== Cálculo principal =====
+let ultimaRecomendacao="";
+
 function calcularPrincipal(){
   const altura=parseFloat(document.getElementById("altura").value);
   const peso=parseFloat(document.getElementById("peso").value);
@@ -36,12 +39,23 @@ function calcularPrincipal(){
   const gordura=(1.2*imc+0.23*25-5.4).toFixed(1);
   const massa=(peso-(peso*gordura/100)).toFixed(1);
 
+  if(imc<18.5){
+    ultimaRecomendacao="Foco em Peito e Braços (hipertrofia)";
+  } else if(imc<24.9){
+    ultimaRecomendacao="Treino equilibrado: Costas, Peito, Braços e Pernas";
+  } else if(imc<29.9){
+    ultimaRecomendacao="Mais Pernas e Cardio + musculação leve";
+  } else {
+    ultimaRecomendacao="Foco em Cardio + Pernas e Costas";
+  }
+
   document.getElementById("resultadoPrincipal").innerHTML=`
     <p><b>IMC:</b> ${imc} (${status})</p>
     <p><b>% Gordura:</b> ${gordura}%</p>
     <p><b>Massa magra:</b> ${massa} kg</p>
     <p><b>Braço:</b> ${braco} cm | <b>Perna:</b> ${perna} cm | <b>Cintura:</b> ${cintura} cm</p>
     <p><b>Meta:</b> ${meta} kg</p>
+    <p style="color:#ff6b6b"><b>Recomendação:</b> ${ultimaRecomendacao}</p>
   `;
 }
 
@@ -57,10 +71,12 @@ function validarEvolucao(){
     const img=document.createElement("img");
     img.src=e.target.result;
     img.onclick=()=>abrirModal(img.src);
+
     const btn=document.createElement("button");
-    btn.innerText="X";
+    btn.innerText="×";
     btn.classList.add("delete-btn");
     btn.onclick=()=>container.remove();
+
     container.appendChild(img);
     container.appendChild(btn);
     document.getElementById("fotosEvolucao").appendChild(container);
@@ -83,34 +99,34 @@ function validarTreino(){
   if(!objetivo){alert("Escolha um treino!");return;}
 
   let treino="";
-  if(objetivo==="ramon"){
-    treino=`Treino estilo <b>Ramon Dino</b>:<br>
+  if(objetivo==="costas"){
+    treino=`Treino de Costas:<br>
+    - Barra fixa 4x até falha<br>
+    - Remada curvada 4x10<br>
+    - Puxada alta 4x12<br>
+    - Levantamento terra 4x8`;
+  } else if(objetivo==="perna"){
+    treino=`Treino de Pernas:<br>
     - Agachamento livre 4x10<br>
     - Leg press 4x12<br>
     - Cadeira extensora 3x15<br>
     - Stiff 4x12<br>
     - Panturrilha 5x20`;
-  } else if(objetivo==="cbum"){
-    treino=`Treino estilo <b>CBum</b>:<br>
+  } else if(objetivo==="peito"){
+    treino=`Treino de Peito:<br>
     - Supino reto 4x8<br>
-    - Crucifixo inclinado 3x12<br>
-    - Remada curvada 4x10<br>
-    - Puxada alta 4x12<br>
+    - Supino inclinado 4x10<br>
+    - Crucifixo 3x12<br>
+    - Flexão 3x15`;
+  } else if(objetivo==="braco"){
+    treino=`Treino de Braços:<br>
     - Rosca bíceps 4x12<br>
-    - Tríceps pulley 4x12`;
-  } else if(objetivo==="arnold"){
-    treino=`Treino estilo <b>Arnold</b>:<br>
-    - Supino inclinado 5x10<br>
-    - Desenvolvimento militar 4x10<br>
-    - Barra fixa 5x até falha<br>
-    - Levantamento terra 4x8<br>
-    - Rosca alternada 4x12`;
-  } else if(objetivo==="atletico"){
-    treino="Treino geral para corpo atlético (ABC dividido)";
-  } else if(objetivo==="emagrecer"){
-    treino="Treino com mais cardio (HIIT, corrida leve, bike + musculação adaptada)";
+    - Rosca martelo 4x12<br>
+    - Tríceps pulley 4x12<br>
+    - Tríceps testa 3x12`;
   }
 
+  treino += `<br><br><b>Recomendação calculadora:</b> ${ultimaRecomendacao}`;
   document.getElementById("planoTreino").innerHTML=treino;
 }
 
