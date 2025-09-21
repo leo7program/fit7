@@ -1,166 +1,131 @@
-// ======== TROCA DE ABAS ========
-const tabs = document.querySelectorAll('.tab-btn');
-const sections = document.querySelectorAll('.tab');
+console.log("script carregado");
 
-tabs.forEach(btn => {
-  btn.addEventListener('click', () => {
-    tabs.forEach(b => b.classList.remove('active'));
-    sections.forEach(s => s.classList.remove('active'));
-
+// Troca de abas
+const tabs=document.querySelectorAll('.tab-btn');
+const sections=document.querySelectorAll('.tab');
+tabs.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    tabs.forEach(b=>b.classList.remove('active'));
+    sections.forEach(s=>s.classList.remove('active'));
     btn.classList.add('active');
-    const tabId = btn.getAttribute('data-tab');
-    document.getElementById(tabId).classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
   });
 });
 
-// ======== IMC / MASSA / GORDURA ========
-let historicoIMC = [];
-let graficoIMC = null;
+// ===== Cálculo principal =====
+function calcularPrincipal(){
+  const altura=parseFloat(document.getElementById("altura").value);
+  const peso=parseFloat(document.getElementById("peso").value);
+  const meta=parseFloat(document.getElementById("meta").value);
+  const braco=document.getElementById("braco").value;
+  const perna=document.getElementById("perna").value;
+  const cintura=document.getElementById("cintura").value;
 
-function validarCampos() {
-  const campos = document.querySelectorAll('#principal input, #principal select');
-  let valido = true;
-
-  campos.forEach(c => {
-    if (!c.value || c.value.trim() === "") {
-      c.classList.add('invalid');
-      c.focus();
-      valido = false;
-      setTimeout(() => c.classList.remove('invalid'), 300);
-    }
-  });
-
-  return valido;
-}
-
-function calcularPrincipal() {
-  if (!validarCampos()) return;
-
-  const altura = parseFloat(document.getElementById("altura").value);
-  const peso = parseFloat(document.getElementById("peso").value);
-  const meta = parseFloat(document.getElementById("meta").value);
-  const braco = parseFloat(document.getElementById("braco").value);
-  const perna = parseFloat(document.getElementById("perna").value);
-  const cintura = parseFloat(document.getElementById("cintura").value);
-
-  const imc = (peso / (altura * altura)).toFixed(2);
-  const gordura = (1.2 * imc) + (0.23 * 25) - 5.4;
-  const massa = peso * (1 - gordura / 100);
-
-  let classificacao = "";
-  if (imc < 18.5) classificacao = "Abaixo do peso";
-  else if (imc < 24.9) classificacao = "Peso normal";
-  else if (imc < 29.9) classificacao = "Sobrepeso";
-  else classificacao = "Obesidade";
-
-  const dif = (peso - meta).toFixed(1);
-  let msg = "";
-  if (dif > 0) msg = `Precisa perder ${dif} kg para atingir a meta.`;
-  else if (dif < 0) msg = `Precisa ganhar ${Math.abs(dif)} kg para atingir a meta.`;
-  else msg = "Você está na meta!";
-
-  document.getElementById("resultadoPrincipal").innerHTML =
-    `<p>IMC: ${imc} (${classificacao})</p>
-     <p>Massa muscular: ${massa.toFixed(1)} kg</p>
-     <p>% Gordura: ${gordura.toFixed(1)}%</p>
-     <p>${msg}</p>
-     <p>Braço: ${braco} cm | Perna: ${perna} cm | Cintura: ${cintura} cm</p>`;
-
-  // Atualizar gráfico
-  historicoIMC.push(parseFloat(imc));
-  if (graficoIMC) graficoIMC.destroy();
-
-  const ctx = document.getElementById('graficoIMC').getContext('2d');
-  graficoIMC = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: historicoIMC.map((_, i) => i + 1),
-      datasets: [{
-        label: 'IMC',
-        data: historicoIMC,
-        borderColor: '#ff6b6b',
-        fill: false,
-        tension: 0.3
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { labels: { color: '#fff' } } },
-      scales: {
-        y: { beginAtZero: true, ticks: { color: '#fff' } },
-        x: { ticks: { color: '#fff' } }
-      }
-    }
-  });
-}
-
-// ======== EVOLUÇÃO COM FOTOS ========
-function validarEvolucao() {
-  const upload = document.getElementById("uploadFotoEvolucao");
-  if (!upload.files || !upload.files[0]) {
-    upload.classList.add('invalid');
-    setTimeout(() => upload.classList.remove('invalid'), 300);
+  if(!altura||!peso||!meta||!braco||!perna||!cintura){
+    alert("Preencha todos os campos!");
     return;
   }
-  adicionarFotoEvolucao();
+
+  const imc=(peso/(altura*altura)).toFixed(2);
+  let status="";
+  if(imc<18.5) status="Abaixo do peso";
+  else if(imc<24.9) status="Peso ideal";
+  else if(imc<29.9) status="Sobrepeso";
+  else status="Obesidade";
+
+  const gordura=(1.2*imc+0.23*25-5.4).toFixed(1);
+  const massa=(peso-(peso*gordura/100)).toFixed(1);
+
+  document.getElementById("resultadoPrincipal").innerHTML=`
+    <p><b>IMC:</b> ${imc} (${status})</p>
+    <p><b>% Gordura:</b> ${gordura}%</p>
+    <p><b>Massa magra:</b> ${massa} kg</p>
+    <p><b>Braço:</b> ${braco} cm | <b>Perna:</b> ${perna} cm | <b>Cintura:</b> ${cintura} cm</p>
+    <p><b>Meta:</b> ${meta} kg</p>
+  `;
 }
 
-function adicionarFotoEvolucao() {
-  const upload = document.getElementById("uploadFotoEvolucao");
-  const fotos = document.getElementById("fotosEvolucao");
-  if (upload.files && upload.files[0]) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const img = document.createElement("img");
-      img.src = e.target.result;
-      fotos.appendChild(img);
-    }
-    reader.readAsDataURL(upload.files[0]);
+// ===== Evolução =====
+function validarEvolucao(){
+  const input=document.getElementById("uploadFotoEvolucao");
+  if(input.files.length===0){alert("Escolha uma foto!");return;}
+  const file=input.files[0];
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const container=document.createElement("div");
+    container.classList.add("foto-container");
+    const img=document.createElement("img");
+    img.src=e.target.result;
+    img.onclick=()=>abrirModal(img.src);
+    const btn=document.createElement("button");
+    btn.innerText="X";
+    btn.classList.add("delete-btn");
+    btn.onclick=()=>container.remove();
+    container.appendChild(img);
+    container.appendChild(btn);
+    document.getElementById("fotosEvolucao").appendChild(container);
   }
+  reader.readAsDataURL(file);
 }
 
-// ======== PLANO DE TREINO ========
-function validarTreino() {
-  const objetivo = document.getElementById("objetivoTreino");
-  const nivel = document.getElementById("nivelTreino");
-  let valido = true;
+function abrirModal(src){
+  let modal=document.createElement("div");
+  modal.classList.add("modal");
+  modal.innerHTML=`<img src="${src}">`;
+  modal.onclick=()=>modal.remove();
+  document.body.appendChild(modal);
+  modal.style.display="flex";
+}
 
-  if (!objetivo.value) {
-    objetivo.classList.add('invalid');
-    setTimeout(() => objetivo.classList.remove('invalid'), 300);
-    valido = false;
+// ===== Treino =====
+function validarTreino(){
+  const objetivo=document.getElementById("objetivoTreino").value;
+  if(!objetivo){alert("Escolha um treino!");return;}
+
+  let treino="";
+  if(objetivo==="ramon"){
+    treino=`Treino estilo <b>Ramon Dino</b>:<br>
+    - Agachamento livre 4x10<br>
+    - Leg press 4x12<br>
+    - Cadeira extensora 3x15<br>
+    - Stiff 4x12<br>
+    - Panturrilha 5x20`;
+  } else if(objetivo==="cbum"){
+    treino=`Treino estilo <b>CBum</b>:<br>
+    - Supino reto 4x8<br>
+    - Crucifixo inclinado 3x12<br>
+    - Remada curvada 4x10<br>
+    - Puxada alta 4x12<br>
+    - Rosca bíceps 4x12<br>
+    - Tríceps pulley 4x12`;
+  } else if(objetivo==="arnold"){
+    treino=`Treino estilo <b>Arnold</b>:<br>
+    - Supino inclinado 5x10<br>
+    - Desenvolvimento militar 4x10<br>
+    - Barra fixa 5x até falha<br>
+    - Levantamento terra 4x8<br>
+    - Rosca alternada 4x12`;
+  } else if(objetivo==="atletico"){
+    treino="Treino geral para corpo atlético (ABC dividido)";
+  } else if(objetivo==="emagrecer"){
+    treino="Treino com mais cardio (HIIT, corrida leve, bike + musculação adaptada)";
   }
-  if (!nivel.value) {
-    nivel.classList.add('invalid');
-    setTimeout(() => nivel.classList.remove('invalid'), 300);
-    valido = false;
-  }
-  if (!valido) return;
 
-  gerarTreino();
+  document.getElementById("planoTreino").innerHTML=treino;
 }
 
-function gerarTreino() {
-  const objetivo = document.getElementById("objetivoTreino").value;
-  const nivel = document.getElementById("nivelTreino").value;
+// ===== PDF =====
+function gerarPDFProfissional(){
+  const { jsPDF } = window.jspdf;
+  const doc=new jsPDF();
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(18);
+  doc.text("Plano Fitness",105,20,{align:"center"});
 
-  let plano = "";
+  doc.setFontSize(12);
+  doc.text(document.getElementById("resultadoPrincipal").innerText,20,40);
+  doc.text("Treino:",20,80);
+  doc.text(document.getElementById("planoTreino").innerText,20,90);
 
-  if (objetivo === "atletico") plano = "3x musculação + 2x cardio leve";
-  else if (objetivo === "maromba") plano = "5x musculação intensa + 2x cardio";
-  else if (objetivo === "emagrecer") plano = "3x musculação + 4x HIIT";
-  else plano = "Manutenção leve";
-
-  document.getElementById("planoTreino").innerText = `Plano: ${plano} (Nível: ${nivel})`;
-  document.getElementById("recomendacaoAlimentacao").innerText = "Recomendações alimentares: proteínas magras, legumes, hidratação e controle de carboidratos.";
-}
-
-// ======== GERAR PDF ========
-function gerarPDFProfissional() {
-  html2canvas(document.querySelector('.app-container')).then(canvas => {
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jspdf.jsPDF();
-    pdf.addImage(imgData, 'PNG', 0, 0, 210, canvas.height * 210 / canvas.width);
-    pdf.save('fitness_app.pdf');
-  });
+  doc.save("plano-fitness.pdf");
 }
