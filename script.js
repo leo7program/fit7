@@ -1,12 +1,14 @@
-// CONTROLES DE ABAS
+// CONTROLE DE ABAS
 const tabs = document.querySelectorAll('.tab-btn');
 const sections = document.querySelectorAll('.tab');
+
 tabs.forEach(tab => {
   tab.addEventListener('click', () => {
-    tabs.forEach(t=>t.classList.remove('active'));
+    tabs.forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
+
     const target = tab.dataset.tab;
-    sections.forEach(s=>s.classList.remove('active'));
+    sections.forEach(s => s.classList.remove('active'));
     document.getElementById(target).classList.add('active');
   });
 });
@@ -24,9 +26,14 @@ const savedEl = document.getElementById('savedMeasures');
 const resultadoEl = document.getElementById('resultado');
 const recomEl = document.getElementById('recomendacoes');
 const calcularBtn = document.getElementById('calcularBtn');
+const galeriaEl = document.getElementById('galeria');
+const addFotoEl = document.getElementById('addFoto');
+const gerarTreinoBtn = document.getElementById('gerarTreinoBtn');
+const treinoResultadoEl = document.getElementById('treinoResultado');
 
-// ARMAZENAMENTO LOCAL SIMPLES
 let STORE = { history: [] };
+
+// SALVAR MEDIDAS
 function saveMeasure() {
   const data = {
     altura:+alturaEl.value, peso:+pesoEl.value, idade:+idadeEl.value, sexo:sexoEl.value,
@@ -37,6 +44,7 @@ function saveMeasure() {
   populateSavedMeasuresSelect();
 }
 
+// PREENCHER MEDIDAS SALVAS
 function populateSavedMeasuresSelect(){
   savedEl.innerHTML = '<option value="">Selecionar medidas salvas</option>';
   STORE.history.slice().reverse().forEach((h, idx)=>{
@@ -83,10 +91,7 @@ calcularBtn.addEventListener('click',()=>{
   saveMeasure();
 });
 
-// GALERIA
-const galeriaEl = document.getElementById('galeria');
-const addFotoEl = document.getElementById('addFoto');
-
+// GALERIA DE EVOLUÇÃO
 addFotoEl.addEventListener('change', e=>{
   const file = e.target.files[0];
   if(!file) return;
@@ -94,14 +99,11 @@ addFotoEl.addEventListener('change', e=>{
   const img = document.createElement('img');
   img.src=url;
   img.addEventListener('click', ()=>img.classList.toggle('enlarged'));
-  img.addEventListener('contextmenu', (ev)=>{ ev.preventDefault(); img.remove(); });
+  img.addEventListener('contextmenu', ev=>{ ev.preventDefault(); img.remove(); });
   galeriaEl.appendChild(img);
 });
 
 // TREINO SIMPLES
-const gerarTreinoBtn = document.getElementById('gerarTreinoBtn');
-const treinoResultadoEl = document.getElementById('treinoResultado');
-
 gerarTreinoBtn.addEventListener('click', ()=>{
   let treino="";
   if(objetivoEl.value==="perda") treino="Cardio 30min + Treino de força leve";
