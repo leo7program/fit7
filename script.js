@@ -1,4 +1,4 @@
-// CONTROLE DE ABAS
+// ABAS
 const tabs = document.querySelectorAll('.tab-btn');
 const sections = document.querySelectorAll('.tab');
 
@@ -6,7 +6,6 @@ tabs.forEach(tab => {
   tab.addEventListener('click', () => {
     tabs.forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
-
     const target = tab.dataset.tab;
     sections.forEach(s => s.classList.remove('active'));
     document.getElementById(target).classList.add('active');
@@ -28,12 +27,13 @@ const recomEl = document.getElementById('recomendacoes');
 const calcularBtn = document.getElementById('calcularBtn');
 const galeriaEl = document.getElementById('galeria');
 const addFotoEl = document.getElementById('addFoto');
+const grupoMuscularEl = document.getElementById('grupoMuscular');
 const gerarTreinoBtn = document.getElementById('gerarTreinoBtn');
 const treinoResultadoEl = document.getElementById('treinoResultado');
 
 let STORE = { history: [] };
 
-// SALVAR MEDIDAS
+// FUNÇÃO PARA SALVAR MEDIDAS
 function saveMeasure() {
   const data = {
     altura:+alturaEl.value, peso:+pesoEl.value, idade:+idadeEl.value, sexo:sexoEl.value,
@@ -62,11 +62,11 @@ savedEl.addEventListener('change', e=>{
   }
 });
 
-// VALIDAÇÃO E CALCULO
+// VALIDAÇÃO E CALCULO IMC
 calcularBtn.addEventListener('click',()=>{
   let valid=true;
   [alturaEl,pesoEl,idadeEl,sexoEl,objetivoEl,bracoEl,pernaEl,cinturaEl].forEach(i=>{
-    if(!i.value){i.classList.add('invalid'); valid=false;}
+    if(!i.value){i.classList.add('invalid'); valid=false;} 
     else i.classList.remove('invalid');
   });
   if(!valid) return;
@@ -91,7 +91,7 @@ calcularBtn.addEventListener('click',()=>{
   saveMeasure();
 });
 
-// GALERIA DE EVOLUÇÃO
+// GALERIA
 addFotoEl.addEventListener('change', e=>{
   const file = e.target.files[0];
   if(!file) return;
@@ -103,11 +103,12 @@ addFotoEl.addEventListener('change', e=>{
   galeriaEl.appendChild(img);
 });
 
-// TREINO SIMPLES
+// TREINO
 gerarTreinoBtn.addEventListener('click', ()=>{
+  const grupo = grupoMuscularEl.value;
   let treino="";
-  if(objetivoEl.value==="perda") treino="Cardio 30min + Treino de força leve";
-  else if(objetivoEl.value==="ganho") treino="Treino pesado: Peito, Costas, Pernas, Braços";
-  else treino="Treino equilibrado 4x/semana";
+  if(objetivoEl.value==="perda") treino="Cardio 30min + Treino leve de força";
+  else if(objetivoEl.value==="ganho") treino="Treino intenso: "+grupo+" com séries de 8-12 reps";
+  else treino="Treino equilibrado 4x/semana focando em todos os grupos musculares";
   treinoResultadoEl.innerHTML=treino;
 });
