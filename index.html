@@ -9,12 +9,12 @@
 <body>
 
   <header>
-    <h1>🏋️ Calculadora Fitness</h1>
+    <h1>🏋️ Fitness App</h1>
     <nav>
-      <button class="tab-btn active" data-tab="perfil">Perfil</button>
-      <button class="tab-btn" data-tab="imc">IMC & Macros</button>
-      <button class="tab-btn" data-tab="evolucao">Evolução</button>
-      <button class="tab-btn" data-tab="treino">Plano de Treino</button>
+      <button class="tab-btn active" data-tab="perfil">👤 Perfil</button>
+      <button class="tab-btn" data-tab="imc">📊 IMC</button>
+      <button class="tab-btn" data-tab="evolucao">📸 Evolução</button>
+      <button class="tab-btn" data-tab="treino">💪 Treino</button>
     </nav>
   </header>
 
@@ -23,58 +23,55 @@
     <!-- ABA PERFIL -->
     <section id="perfil" class="tab active">
       <h2>Perfil & Medidas</h2>
-      <form id="perfilForm">
-        <div class="form-grid">
-          <div class="col">
-            <label for="altura">Altura (m)</label>
-            <input type="number" id="altura" name="altura" min="1" max="2.5" step="0.01" required>
-          </div>
-          <div class="col">
-            <label for="peso">Peso (kg)</label>
-            <input type="number" id="peso" name="peso" min="30" max="500" step="0.5" required>
-          </div>
-          <div class="col">
-            <label for="idade">Idade</label>
-            <input type="number" id="idade" name="idade" min="5" max="120" required>
-          </div>
-          <div class="col">
-            <label for="sexo">Sexo</label>
-            <select id="sexo" name="sexo" required>
-              <option value="">Selecionar</option>
-              <option value="masculino">Masculino</option>
-              <option value="feminino">Feminino</option>
-            </select>
-          </div>
-          <div class="col">
-            <label for="objetivo">Objetivo</label>
-            <select id="objetivo" name="objetivo" required>
-              <option value="">Selecionar</option>
-              <option value="perda">Perda de gordura</option>
-              <option value="ganho">Ganho de massa</option>
-              <option value="manter">Manutenção</option>
-            </select>
-          </div>
-          <div class="col">
-            <label for="braco">Bíceps (cm)</label>
-            <input type="number" id="braco" name="braco" min="10" max="80" step="0.5">
-          </div>
-          <div class="col">
-            <label for="perna">Perna (cm)</label>
-            <input type="number" id="perna" name="perna" min="20" max="120" step="0.5">
-          </div>
-          <div class="col">
-            <label for="cintura">Cintura (cm)</label>
-            <input type="number" id="cintura" name="cintura" min="30" max="200" step="0.5">
-          </div>
-          <div class="col">
-            <label for="savedMeasures">Medidas Salvas</label>
-            <select id="savedMeasures" name="savedMeasures">
-              <option value="">Selecionar medidas salvas</option>
-            </select>
-          </div>
+      <div class="form-grid">
+        <div class="col">
+          <label>Altura (m)</label>
+          <input type="number" id="altura" min="1" max="2.5" step="0.01" placeholder="1,70">
         </div>
-        <button type="submit">Salvar Medidas</button>
-      </form>
+        <div class="col">
+          <label>Peso (kg)</label>
+          <input type="number" id="peso" min="30" max="500" step="0.5" placeholder="70">
+        </div>
+        <div class="col">
+          <label>Idade</label>
+          <input type="number" id="idade" min="5" max="120" placeholder="25">
+        </div>
+        <div class="col">
+          <label>Sexo</label>
+          <select id="sexo">
+            <option value="">Selecionar</option>
+            <option value="masculino">Masculino</option>
+            <option value="feminino">Feminino</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>Objetivo</label>
+          <select id="objetivo">
+            <option value="">Selecionar</option>
+            <option value="perda">Perda de gordura</option>
+            <option value="ganho">Ganho de massa</option>
+            <option value="manter">Manutenção</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>Bíceps (cm)</label>
+          <input type="number" id="braco" min="10" max="80" step="0.5">
+        </div>
+        <div class="col">
+          <label>Perna (cm)</label>
+          <input type="number" id="perna" min="20" max="120" step="0.5">
+        </div>
+        <div class="col">
+          <label>Cintura (cm)</label>
+          <input type="number" id="cintura" min="30" max="200" step="0.5">
+        </div>
+        <div class="col">
+          <label>Medidas Salvas</label>
+          <select id="savedMeasures">
+            <option value="">Selecionar medidas salvas</option>
+          </select>
+        </div>
+      </div>
     </section>
 
     <!-- ABA IMC -->
@@ -95,6 +92,13 @@
     <!-- ABA TREINO -->
     <section id="treino" class="tab">
       <h2>Plano de Treino</h2>
+      <select id="grupoMuscular">
+        <option value="">Selecionar grupo muscular</option>
+        <option value="peito">Peito</option>
+        <option value="costas">Costas</option>
+        <option value="perna">Perna</option>
+        <option value="braco">Braço</option>
+      </select>
       <button id="gerarTreinoBtn">Gerar Treino</button>
       <div id="treinoResultado"></div>
       <button id="exportPDFBtn">Exportar PDF</button>
