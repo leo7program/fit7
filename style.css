@@ -1,228 +1,263 @@
-/* ---------- Reset básico ---------- */
+:root {
+  --bg: #111827;
+  --card: #1f2937;
+  --muted: #9ca3af;
+  --accent: #ff6b6b;
+  --text: #ffffff;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --hover: rgba(255, 107, 107, 0.2);
+}
+
 * {
+  box-sizing: border-box;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-  background-color: #fff7f0;
-  color: #333;
-  line-height: 1.5;
-  padding-bottom: 60px; /* espaço para o footer */
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ---------- Header / Nav ---------- */
-header {
-  background-color: #ffa500aa;
-  padding: 15px 20px;
+.app {
+  max-width: 980px;
+  margin: 12px auto;
+  padding: 12px;
+}
+
+/* Header */
+.app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  border-bottom: 1px solid #f0a500;
+  margin-bottom: 12px;
+}
+.app-header h1 {
+  color: var(--accent);
+}
+.app-header small {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+.icon-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.icon-btn:hover {
+  background: var(--hover);
 }
 
-header h1 {
-  font-size: 1.5rem;
-  color: #fff;
-}
-
-.nav {
+/* Navigation Tabs */
+.main-nav {
   display: flex;
   gap: 10px;
+  margin-bottom: 12px;
 }
-
 .nav-btn {
-  background: transparent;
+  flex: 1;
+  padding: 10px 0;
+  text-align: center;
+  background: var(--card);
   border: none;
-  font-weight: bold;
-  color: #fff;
-  padding: 8px 12px;
+  border-radius: 10px;
   cursor: pointer;
-  border-radius: 5px;
-  transition: background 0.3s;
+  color: var(--text);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.nav-btn.active, .nav-btn:hover {
+  background: var(--accent);
+  color: #fff;
 }
 
-.nav-btn.active,
-.nav-btn:hover {
-  background-color: #ffb347;
+/* Layout */
+.main-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
 }
 
-/* ---------- Tabs / Sections ---------- */
-.tab {
-  display: none;
-  padding: 20px;
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
 }
 
-.tab.active {
-  display: block;
+.row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
-/* ---------- Inputs ---------- */
-input, select {
-  padding: 8px;
-  margin: 6px 0;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 100%;
+.col {
+  flex: 1;
+  min-width: 150px;
+}
+
+.rightcol {
+  text-align: right;
 }
 
 label {
-  font-weight: bold;
   display: block;
-  margin-top: 10px;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: var(--muted);
 }
 
-/* ---------- Buttons ---------- */
-button {
-  cursor: pointer;
-  background-color: #ff8c00;
-  border: none;
-  color: white;
-  padding: 10px 16px;
-  border-radius: 6px;
-  margin-top: 10px;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-button:hover {
-  background-color: #ffa500;
-}
-
-/* ---------- Resultado IMC ---------- */
-#resultadoBox {
-  margin-top: 15px;
-  padding: 15px;
-  border-radius: 8px;
-  background-color: #fff3e0;
-  border: 1px solid #ffb347;
-}
-
-/* ---------- Modal ---------- */
-#profileModal {
-  position: fixed;
-  top: 0;
-  left: 0;
+input[type="number"], input[type="text"], select {
   width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+}
+
+.btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn:hover {
+  background: var(--hover);
+}
+.btn.primary {
+  background: var(--accent);
+  border: none;
+  color: #fff;
+}
+
+.actions {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 200;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
 }
 
-#profileModal.hidden {
-  display: none;
+.resultado {
+  margin-top: 12px;
+  padding: 12px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  color: var(--text);
 }
 
-#profileModal .modal-content {
-  background-color: #fff;
-  padding: 25px;
-  border-radius: 10px;
-  max-width: 400px;
-  width: 90%;
-  text-align: center;
-}
-
-#profileModal input, #profileModal select {
-  width: 80%;
-  margin-bottom: 15px;
-}
-
-/* ---------- Gallery ---------- */
-#gallery {
+/* Gallery */
+.gallery {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 15px;
+  gap: 12px;
+  margin-top: 12px;
 }
 
 .foto {
-  width: 100px;
-  height: 100px;
+  position: relative;
+  width: 200px;
+  height: 140px;
+  border-radius: 10px;
   overflow: hidden;
-  border-radius: 8px;
-  border: 1px solid #ffa500aa;
+  background: #000;
 }
 
 .foto img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   cursor: pointer;
-  transition: transform 0.3s;
 }
 
-.foto img:hover {
-  transform: scale(1.1);
+.foto .del {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-/* ---------- Lightbox ---------- */
-#lightbox {
+/* Lightbox */
+.lightbox {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.8);
+  inset: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 300;
+  justify-content: center;
+  background: rgba(0,0,0,0.85);
+  z-index: 40;
 }
-
-#lightbox.hidden {
-  display: none;
-}
-
-#lightbox img {
+.lightbox img {
   max-width: 90%;
   max-height: 90%;
   border-radius: 10px;
 }
-
-/* ---------- Treino ---------- */
-#treinoOutput {
-  margin-top: 15px;
-  padding: 15px;
-  background-color: #fff3e0;
-  border: 1px solid #ffb347;
+.lightbox-close {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  padding: 8px;
   border-radius: 8px;
+  cursor: pointer;
 }
 
-/* ---------- Footer ---------- */
-footer {
+/* Modal */
+.modal {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  padding: 10px;
-  font-size: 14px;
-  color: #555;
-  background-color: #ffe5b4aa;
-  border-top: 1px solid #ffb347;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  z-index: 50;
+}
+.modal-card {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+  min-width: 320px;
 }
 
-/* ---------- Responsividade ---------- */
-@media (max-width: 768px) {
-  .nav {
+/* Timer */
+.timer-display {
+  font-size: 32px;
+  text-align: center;
+  margin: 12px 0;
+}
+
+/* Hidden */
+.hidden {
+  display: none !important;
+}
+
+/* Responsive */
+@media (max-width:720px){
+  .row {
     flex-direction: column;
-    gap: 5px;
   }
-
-  #gallery {
-    justify-content: center;
-  }
-
   .foto {
-    width: 80px;
-    height: 80px;
+    width: 48%;
+    height: 160px;
   }
 }
