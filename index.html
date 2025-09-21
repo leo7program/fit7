@@ -3,91 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fitness App</title>
+  <title>Calculadora Fitness</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app-container">
-
-    <nav class="tabs">
-      <button class="tab-btn active" data-tab="principal">🏋️ IMC</button>
-      <button class="tab-btn" data-tab="evolucao">📸 Evolução</button>
-      <button class="tab-btn" data-tab="treino">🔥 Treino</button>
+  <header>
+    <h1>🏋️ Calculadora Fitness</h1>
+    <nav>
+      <button class="tab-btn active" data-tab="perfil">Perfil</button>
+      <button class="tab-btn" data-tab="imc">IMC & Macros</button>
+      <button class="tab-btn" data-tab="evolucao">Evolução</button>
+      <button class="tab-btn" data-tab="treino">Plano de Treino</button>
     </nav>
+  </header>
 
-    <!-- Principal -->
-    <section id="principal" class="tab active">
-      <h2>Calculadora Fitness</h2>
-      <div class="card input-card">
-        <label>Altura</label>
-        <input type="number" id="altura" min="1" max="2.5" step="0.01" placeholder="Ex: 1,80 m">
-      </div>
-      <div class="card input-card">
-        <label>Peso</label>
-        <input type="number" id="peso" min="30" max="500" step="0.1" placeholder="Ex: 80 kg">
-      </div>
-      <div class="card input-card">
-        <label>Peso Meta</label>
-        <input type="number" id="meta" min="30" max="500" step="0.1" placeholder="Ex: 75 kg">
-      </div>
-      <div class="card input-card">
-        <label>Braço</label>
-        <input type="number" id="braco" min="10" max="80" placeholder="Ex: 40 cm">
-      </div>
-      <div class="card input-card">
-        <label>Perna</label>
-        <input type="number" id="perna" min="20" max="120" placeholder="Ex: 60 cm">
-      </div>
-      <div class="card input-card">
-        <label>Cintura</label>
-        <input type="number" id="cintura" min="30" max="200" placeholder="Ex: 85 cm">
-      </div>
-
-      <button class="btn" onclick="calcularPrincipal()">Calcular</button>
-      <div id="resultadoPrincipal" class="resultado card"></div>
-
-      <div class="next-btns">
-        <button class="btn" onclick="abrirTab('evolucao')">➡ Evolução</button>
+  <main>
+    <!-- ABA PERFIL -->
+    <section id="perfil" class="tab active">
+      <h2>Perfil & Medidas</h2>
+      <div class="form-grid">
+        <div class="col">
+          <label>Altura (m)</label>
+          <input type="number" id="altura" min="1" max="2.5" step="0.01" placeholder="1,70">
+        </div>
+        <div class="col">
+          <label>Peso (kg)</label>
+          <input type="number" id="peso" min="30" max="500" step="0.5" placeholder="70">
+        </div>
+        <div class="col">
+          <label>Idade</label>
+          <input type="number" id="idade" min="5" max="120" placeholder="25">
+        </div>
+        <div class="col">
+          <label>Sexo</label>
+          <select id="sexo">
+            <option value="">Selecionar</option>
+            <option value="masculino">Masculino</option>
+            <option value="feminino">Feminino</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>Objetivo</label>
+          <select id="objetivo">
+            <option value="">Selecionar</option>
+            <option value="perda">Perda de gordura</option>
+            <option value="ganho">Ganho de massa</option>
+            <option value="manter">Manutenção</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>Bíceps (cm)</label>
+          <input type="number" id="braco" min="10" max="80" step="0.5">
+        </div>
+        <div class="col">
+          <label>Perna (cm)</label>
+          <input type="number" id="perna" min="20" max="120" step="0.5">
+        </div>
+        <div class="col">
+          <label>Cintura (cm)</label>
+          <input type="number" id="cintura" min="30" max="200" step="0.5">
+        </div>
+        <div class="col">
+          <label>Medidas Salvas</label>
+          <select id="savedMeasures">
+            <option value="">Selecionar medidas salvas</option>
+          </select>
+        </div>
       </div>
     </section>
 
-    <!-- Evolução -->
+    <!-- ABA IMC -->
+    <section id="imc" class="tab">
+      <h2>IMC & Recomendações</h2>
+      <button id="calcularBtn">Calcular IMC</button>
+      <div id="resultado"></div>
+      <div id="recomendacoes"></div>
+    </section>
+
+    <!-- ABA EVOLUÇÃO -->
     <section id="evolucao" class="tab">
-      <h2>Evolução Corporal</h2>
-      <input type="file" id="uploadFotoEvolucao" accept="image/*">
-      <button class="btn" onclick="validarEvolucao()">Adicionar Foto</button>
-      <div id="fotosEvolucao" class="fotos"></div>
-
-      <div class="next-btns">
-        <button class="btn" onclick="abrirTab('principal')">⬅ IMC</button>
-        <button class="btn" onclick="abrirTab('treino')">➡ Treino</button>
-      </div>
+      <h2>Evolução Física</h2>
+      <input type="file" id="addFoto" accept="image/*">
+      <div id="galeria"></div>
     </section>
 
-    <!-- Treino -->
+    <!-- ABA TREINO -->
     <section id="treino" class="tab">
       <h2>Plano de Treino</h2>
-      <div class="card input-card">
-        <label>Grupo muscular</label>
-        <select id="objetivoTreino">
-          <option value="">Escolher</option>
-          <option value="costas">Costas</option>
-          <option value="perna">Perna</option>
-          <option value="peito">Peito</option>
-          <option value="braco">Braço</option>
-        </select>
-      </div>
-
-      <button class="btn" onclick="validarTreino()">Gerar Treino</button>
-      <div id="planoTreino" class="resultado card"></div>
-      <button class="btn" onclick="gerarPDFProfissional()">Gerar PDF</button>
-
-      <div class="next-btns">
-        <button class="btn" onclick="abrirTab('evolucao')">⬅ Evolução</button>
-      </div>
+      <button id="gerarTreinoBtn">Gerar Treino</button>
+      <div id="treinoResultado"></div>
+      <button id="exportPDFBtn">Exportar PDF</button>
     </section>
+  </main>
 
-  </div>
   <script src="script.js"></script>
 </body>
 </html>
