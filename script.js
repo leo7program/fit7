@@ -1,147 +1,111 @@
-console.log("script carregado");
-
-// Troca de abas
-const tabs=document.querySelectorAll('.tab-btn');
-const sections=document.querySelectorAll('.tab');
-function abrirTab(nome){
-  tabs.forEach(b=>b.classList.remove('active'));
-  sections.forEach(s=>s.classList.remove('active'));
-  document.querySelector(`[data-tab="${nome}"]`).classList.add('active');
-  document.getElementById(nome).classList.add('active');
-}
-tabs.forEach(btn=>{
-  btn.addEventListener('click',()=>abrirTab(btn.dataset.tab));
+// CONTROLES DE ABAS
+const tabs = document.querySelectorAll('.tab-btn');
+const sections = document.querySelectorAll('.tab');
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const target = tab.dataset.tab;
+    sections.forEach(s=>s.classList.remove('active'));
+    document.getElementById(target).classList.add('active');
+  });
 });
 
-// ===== Cálculo principal =====
-let ultimaRecomendacao="";
+// ELEMENTOS
+const alturaEl = document.getElementById('altura');
+const pesoEl = document.getElementById('peso');
+const idadeEl = document.getElementById('idade');
+const sexoEl = document.getElementById('sexo');
+const objetivoEl = document.getElementById('objetivo');
+const bracoEl = document.getElementById('braco');
+const pernaEl = document.getElementById('perna');
+const cinturaEl = document.getElementById('cintura');
+const savedEl = document.getElementById('savedMeasures');
+const resultadoEl = document.getElementById('resultado');
+const recomEl = document.getElementById('recomendacoes');
+const calcularBtn = document.getElementById('calcularBtn');
 
-function calcularPrincipal(){
-  const altura=parseFloat(document.getElementById("altura").value);
-  const peso=parseFloat(document.getElementById("peso").value);
-  const meta=parseFloat(document.getElementById("meta").value);
-  const braco=document.getElementById("braco").value;
-  const perna=document.getElementById("perna").value;
-  const cintura=document.getElementById("cintura").value;
-
-  if(!altura||!peso||!meta||!braco||!perna||!cintura){
-    alert("Preencha todos os campos!");
-    return;
-  }
-
-  const imc=(peso/(altura*altura)).toFixed(2);
-  let status="";
-  if(imc<18.5) status="Abaixo do peso";
-  else if(imc<24.9) status="Peso ideal";
-  else if(imc<29.9) status="Sobrepeso";
-  else status="Obesidade";
-
-  const gordura=(1.2*imc+0.23*25-5.4).toFixed(1);
-  const massa=(peso-(peso*gordura/100)).toFixed(1);
-
-  if(imc<18.5){
-    ultimaRecomendacao="Foco em Peito e Braços (hipertrofia)";
-  } else if(imc<24.9){
-    ultimaRecomendacao="Treino equilibrado: Costas, Peito, Braços e Pernas";
-  } else if(imc<29.9){
-    ultimaRecomendacao="Mais Pernas e Cardio + musculação leve";
-  } else {
-    ultimaRecomendacao="Foco em Cardio + Pernas e Costas";
-  }
-
-  document.getElementById("resultadoPrincipal").innerHTML=`
-    <p><b>IMC:</b> ${imc} (${status})</p>
-    <p><b>% Gordura:</b> ${gordura}%</p>
-    <p><b>Massa magra:</b> ${massa} kg</p>
-    <p><b>Braço:</b> ${braco} cm | <b>Perna:</b> ${perna} cm | <b>Cintura:</b> ${cintura} cm</p>
-    <p><b>Meta:</b> ${meta} kg</p>
-    <p style="color:#ff6b6b"><b>Recomendação:</b> ${ultimaRecomendacao}</p>
-  `;
+// ARMAZENAMENTO LOCAL SIMPLES
+let STORE = { history: [] };
+function saveMeasure() {
+  const data = {
+    altura:+alturaEl.value, peso:+pesoEl.value, idade:+idadeEl.value, sexo:sexoEl.value,
+    objetivo:objetivoEl.value, braco:+bracoEl.value, perna:+pernaEl.value, cintura:+cinturaEl.value,
+    ts:Date.now()
+  };
+  STORE.history.push(data);
+  populateSavedMeasuresSelect();
 }
 
-// ===== Evolução =====
-function validarEvolucao(){
-  const input=document.getElementById("uploadFotoEvolucao");
-  if(input.files.length===0){alert("Escolha uma foto!");return;}
-  const file=input.files[0];
-  const reader=new FileReader();
-  reader.onload=function(e){
-    const container=document.createElement("div");
-    container.classList.add("foto-container");
-    const img=document.createElement("img");
-    img.src=e.target.result;
-    img.onclick=()=>abrirModal(img.src);
+function populateSavedMeasuresSelect(){
+  savedEl.innerHTML = '<option value="">Selecionar medidas salvas</option>';
+  STORE.history.slice().reverse().forEach((h, idx)=>{
+    savedEl.innerHTML += `<option value="${idx}">${new Date(h.ts).toLocaleDateString()} - ${h.peso}kg / ${h.altura}m</option>`;
+  });
+}
 
-    const btn=document.createElement("button");
-    btn.innerText="×";
-    btn.classList.add("delete-btn");
-    btn.onclick=()=>container.remove();
-
-    container.appendChild(img);
-    container.appendChild(btn);
-    document.getElementById("fotosEvolucao").appendChild(container);
+savedEl.addEventListener('change', e=>{
+  const idx = e.target.value;
+  if(idx!==""){
+    const h = STORE.history[idx];
+    alturaEl.value=h.altura; pesoEl.value=h.peso; objetivoEl.value=h.objetivo;
+    bracoEl.value=h.braco; pernaEl.value=h.perna; cinturaEl.value=h.cintura;
+    idadeEl.value=h.idade; sexoEl.value=h.sexo;
   }
-  reader.readAsDataURL(file);
-}
+});
 
-function abrirModal(src){
-  let modal=document.createElement("div");
-  modal.classList.add("modal");
-  modal.innerHTML=`<img src="${src}">`;
-  modal.onclick=()=>modal.remove();
-  document.body.appendChild(modal);
-  modal.style.display="flex";
-}
+// VALIDAÇÃO E CALCULO
+calcularBtn.addEventListener('click',()=>{
+  let valid=true;
+  [alturaEl,pesoEl,idadeEl,sexoEl,objetivoEl,bracoEl,pernaEl,cinturaEl].forEach(i=>{
+    if(!i.value){i.classList.add('invalid'); valid=false;}
+    else i.classList.remove('invalid');
+  });
+  if(!valid) return;
 
-// ===== Treino =====
-function validarTreino(){
-  const objetivo=document.getElementById("objetivoTreino").value;
-  if(!objetivo){alert("Escolha um treino!");return;}
+  const imc = pesoEl.value / (alturaEl.value**2);
+  let categoria="";
+  if(imc<18.5) categoria="Abaixo do peso";
+  else if(imc<25) categoria="Peso normal";
+  else if(imc<30) categoria="Sobrepeso";
+  else if(imc<35) categoria="Obesidade I";
+  else if(imc<40) categoria="Obesidade II";
+  else categoria="Obesidade III";
 
+  resultadoEl.innerHTML=`Seu IMC é <b>${imc.toFixed(1)}</b> (${categoria})`;
+
+  let recom="";
+  if(imc>=25) recom+="Recomenda-se perder peso com treino cardiovascular e musculação.<br>";
+  else if(imc<18.5) recom+="Recomenda-se ganhar massa muscular com treino de força.<br>";
+  else recom+="Mantenha seu peso com treino equilibrado.<br>";
+  recomEl.innerHTML=recom;
+
+  saveMeasure();
+});
+
+// GALERIA
+const galeriaEl = document.getElementById('galeria');
+const addFotoEl = document.getElementById('addFoto');
+
+addFotoEl.addEventListener('change', e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const url = URL.createObjectURL(file);
+  const img = document.createElement('img');
+  img.src=url;
+  img.addEventListener('click', ()=>img.classList.toggle('enlarged'));
+  img.addEventListener('contextmenu', (ev)=>{ ev.preventDefault(); img.remove(); });
+  galeriaEl.appendChild(img);
+});
+
+// TREINO SIMPLES
+const gerarTreinoBtn = document.getElementById('gerarTreinoBtn');
+const treinoResultadoEl = document.getElementById('treinoResultado');
+
+gerarTreinoBtn.addEventListener('click', ()=>{
   let treino="";
-  if(objetivo==="costas"){
-    treino=`Treino de Costas:<br>
-    - Barra fixa 4x até falha<br>
-    - Remada curvada 4x10<br>
-    - Puxada alta 4x12<br>
-    - Levantamento terra 4x8`;
-  } else if(objetivo==="perna"){
-    treino=`Treino de Pernas:<br>
-    - Agachamento livre 4x10<br>
-    - Leg press 4x12<br>
-    - Cadeira extensora 3x15<br>
-    - Stiff 4x12<br>
-    - Panturrilha 5x20`;
-  } else if(objetivo==="peito"){
-    treino=`Treino de Peito:<br>
-    - Supino reto 4x8<br>
-    - Supino inclinado 4x10<br>
-    - Crucifixo 3x12<br>
-    - Flexão 3x15`;
-  } else if(objetivo==="braco"){
-    treino=`Treino de Braços:<br>
-    - Rosca bíceps 4x12<br>
-    - Rosca martelo 4x12<br>
-    - Tríceps pulley 4x12<br>
-    - Tríceps testa 3x12`;
-  }
-
-  treino += `<br><br><b>Recomendação calculadora:</b> ${ultimaRecomendacao}`;
-  document.getElementById("planoTreino").innerHTML=treino;
-}
-
-// ===== PDF =====
-function gerarPDFProfissional(){
-  const { jsPDF } = window.jspdf;
-  const doc=new jsPDF();
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(18);
-  doc.text("Plano Fitness",105,20,{align:"center"});
-
-  doc.setFontSize(12);
-  doc.text(document.getElementById("resultadoPrincipal").innerText,20,40);
-  doc.text("Treino:",20,80);
-  doc.text(document.getElementById("planoTreino").innerText,20,90);
-
-  doc.save("plano-fitness.pdf");
-}
+  if(objetivoEl.value==="perda") treino="Cardio 30min + Treino de força leve";
+  else if(objetivoEl.value==="ganho") treino="Treino pesado: Peito, Costas, Pernas, Braços";
+  else treino="Treino equilibrado 4x/semana";
+  treinoResultadoEl.innerHTML=treino;
+});
