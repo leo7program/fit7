@@ -6,66 +6,60 @@
 <title>Fitness App</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app-container">
   <header>
-    <h1>Fitness App</h1>
+    <h1>🏋️ Fitness App</h1>
   </header>
 
   <nav class="tab-bar">
-    <button class="tab-btn active" data-tab="principal">🏋️ Principal</button>
+    <button class="tab-btn active" data-tab="principal">📊 IMC</button>
     <button class="tab-btn" data-tab="evolucao">📸 Evolução</button>
-    <button class="tab-btn" data-tab="treino">📄 Treino</button>
+    <button class="tab-btn" data-tab="treino">💪 Treino</button>
   </nav>
 
   <main>
-    <!-- Aba Principal -->
+    <!-- Principal -->
     <section id="principal" class="tab active">
       <h2>Calculadora Fitness</h2>
+
       <div class="card input-card">
-        <label>Altura (m)</label>
-        <input type="number" id="altura" min="0.5" max="2.5" step="0.01">
+        <label>Altura</label>
+        <input type="number" id="altura" min="0.5" max="2.5" step="0.01" placeholder="Ex: 1,80 m">
       </div>
+
       <div class="card input-card">
-        <label>Peso (kg)</label>
-        <input type="number" id="peso" min="30" max="500" step="0.1">
+        <label>Peso</label>
+        <input type="number" id="peso" min="30" max="500" step="0.1" placeholder="Ex: 80 kg">
       </div>
+
       <div class="card input-card">
-        <label>Peso Meta (kg)</label>
-        <input type="number" id="meta" min="30" max="500" step="0.1">
+        <label>Peso Meta</label>
+        <input type="number" id="meta" min="30" max="500" step="0.1" placeholder="Ex: 75 kg">
       </div>
+
       <div class="card input-card">
-        <label>Objetivo</label>
-        <select id="shape">
-          <option value="">Escolher</option>
-          <option value="atletico">Atlético</option>
-          <option value="maromba">Maromba</option>
-          <option value="emagrecer">Emagrecer</option>
-          <option value="manter">Manter</option>
-        </select>
+        <label>Braço</label>
+        <input type="number" id="braco" min="10" max="80" placeholder="Ex: 40 cm">
       </div>
+
       <div class="card input-card">
-        <label>Braço (cm)</label>
-        <input type="number" id="braco" min="10" max="80">
+        <label>Perna</label>
+        <input type="number" id="perna" min="20" max="120" placeholder="Ex: 60 cm">
       </div>
+
       <div class="card input-card">
-        <label>Perna (cm)</label>
-        <input type="number" id="perna" min="20" max="120">
+        <label>Cintura</label>
+        <input type="number" id="cintura" min="30" max="200" placeholder="Ex: 85 cm">
       </div>
-      <div class="card input-card">
-        <label>Cintura (cm)</label>
-        <input type="number" id="cintura" min="30" max="200">
-      </div>
+
       <button class="btn" onclick="calcularPrincipal()">Calcular</button>
       <div id="resultadoPrincipal" class="resultado card"></div>
-      <canvas id="graficoIMC" style="margin-top:15px;"></canvas>
     </section>
 
-    <!-- Aba Evolução -->
+    <!-- Evolução -->
     <section id="evolucao" class="tab">
       <h2>Evolução</h2>
       <div class="card input-card">
@@ -76,35 +70,29 @@
       <div class="fotos" id="fotosEvolucao"></div>
     </section>
 
-    <!-- Aba Treino -->
+    <!-- Treino -->
     <section id="treino" class="tab">
       <h2>Plano de Treino</h2>
       <div class="card input-card">
-        <label>Objetivo</label>
+        <label>Modelo</label>
         <select id="objetivoTreino">
           <option value="">Escolher</option>
           <option value="atletico">Atlético</option>
           <option value="maromba">Maromba</option>
           <option value="emagrecer">Emagrecer</option>
-          <option value="manter">Manter</option>
+          <option value="ramon">Treino Ramon Dino</option>
+          <option value="cbum">Treino CBum</option>
+          <option value="arnold">Treino Arnold</option>
         </select>
       </div>
-      <div class="card input-card">
-        <label>Nível</label>
-        <select id="nivelTreino">
-          <option value="">Escolher</option>
-          <option value="iniciante">Iniciante</option>
-          <option value="intermediario">Intermediário</option>
-          <option value="avancado">Avançado</option>
-        </select>
-      </div>
+
       <button class="btn" onclick="validarTreino()">Gerar Treino</button>
       <div id="planoTreino" class="resultado card"></div>
-      <div id="recomendacaoAlimentacao" class="resultado card"></div>
-      <button class="btn" onclick="gerarPDFProfissional()">Gerar PDF Profissional</button>
+      <button class="btn" onclick="gerarPDFProfissional()">Gerar PDF</button>
     </section>
   </main>
 </div>
+
 <script src="script.js"></script>
 </body>
 </html>
