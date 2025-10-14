@@ -12,9 +12,9 @@
 }
 
 /* light theme overrides */
-.app.light{
-  --bg:#f5f7fb;
-  --surface:#ffffff;
+ .app.light{
+  --bg:#ffffff;            /* fundo branco puro */
+  --surface:#f0f0f3;       /* cards claros */
   --muted:#546178;
   --accent:#2563eb;
   --accent-2:#f43f5e;
