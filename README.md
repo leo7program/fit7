@@ -1,40 +1,42 @@
-Fitness App — Desenvolvido por le7ocean
+Fit7 — Desenvolvido por le7ocean
 
-Aplicativo web completo para acompanhamento de IMC, percentual de gordura corporal, evolução física e treinos personalizados.
+Aplicativo web para acompanhar IMC, percentual de gordura corporal, evolução física e treinos personalizados.
 Desenvolvido com HTML, CSS e JavaScript, responsivo e moderno, com suporte a tema claro e escuro.
 
-Funcionalidades Principais:
+Funcionalidades
 
-Calculadora de IMC e Gordura Corporal
+Calculadora de IMC e Gordura Corporal com histórico gráfico.
 
-Insira medidas e idade para calcular IMC e percentual de gordura corporal.
+Histórico em Gráficos interativos (IMC e gordura corporal) com opção de resetar.
 
-Exibe resultados imediatos com histórico gráfico detalhado.
+Galeria de Fotos do progresso físico com visualização em destaque.
 
-Histórico em Gráficos:
+Plano de Treino por preset, grupo muscular e nível.
 
-Acompanhe evolução com linhas de IMC e gordura corporal.
+Perfil Personalizado com exportação/importação JSON.
 
-Gráficos interativos e bonitos para visualização do progresso.
+Tema Claro e Escuro com contraste ajustado.
 
-Botão de Resetar gráfico para reiniciar todo o histórico.
+Como Usar
 
-Galeria de Fotos de Evolução:
+Abra index.html ou acesse via GitHub Pages.
 
-Faça upload de fotos do progresso físico.
+Configure seu Perfil.
 
-Visualize imagens em destaque com lightbox.
+Preencha medidas na aba IMC e clique em Calcular.
 
-Botões para remover ou limpar todas as fotos.
+Visualize o gráfico de evolução e faça upload de fotos na aba Evolução.
 
-Plano de Treino
+Gere treinos na aba Treino.
 
-Geração de treinos personalizados por:
+Use Exportar/Importar JSON para backup.
 
-Preset famoso
+Alterne entre tema claro e escuro usando o ícone no topo.
 
-Grupo muscular
+Tecnologias
 
-Nível (Iniciante, Intermediário, Avançado)
+HTML5, CSS3, JavaScript (ES6+)
 
-Lista simples de exercícios organizada.
+Chart.js para gráficos interativos
+
+LocalStorage para persistência de dados
