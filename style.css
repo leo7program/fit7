@@ -69,3 +69,15 @@ footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
   .row{flex-direction:column}
   .foto{width:48%;height:120px}
 }
+
+ .app.light{
+  --bg:#ffffff;            /* fundo branco puro */
+  --surface:#f0f0f3;       /* cards claros */
+  --muted:#546178;
+  --accent:#2563eb;
+  --accent-2:#f43f5e;
+  --text:#0b1220;
+  --glass: rgba(0,0,0,0.03);
+  --glass-2: rgba(255,255,255,0.6);
+}
+
