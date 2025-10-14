@@ -1,158 +1,160 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fitness App — Desenvolvido por leo7ocean</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fitness App — Desenvolvido por le7ocean</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-<div class="app">
-  <header class="app-header">
-    <div class="left">
-      <h1>Fitness App</h1>
-      <small id="app-tag">Calculadora • Treinos • Evolução</small>
-    </div>
-    <div class="right">
-      <button id="profileBtn" class="icon-btn">Perfil</button>
-      <button id="darkToggle" class="icon-btn">🌙</button>
-    </div>
-  </header>
+  <div class="app">
+    <header class="app-header">
+      <div class="left">
+        <h1>Fitness App</h1>
+        <small id="app-tag">Calculadora • Treinos • Evolução</small>
+      </div>
+      <div class="right">
+        <button id="profileBtn" class="icon-btn">Perfil</button>
+        <button id="darkToggle" class="icon-btn" aria-label="Alternar tema">🌙</button>
+      </div>
+    </header>
 
-  <nav class="main-nav">
-    <button class="nav-btn active" data-tab="tab-imc">IMC</button>
-    <button class="nav-btn" data-tab="tab-evolucao">Evolução</button>
-    <button class="nav-btn" data-tab="tab-treino">Treino</button>
-    <button class="nav-btn" data-tab="tab-relatorio">Relatório</button>
-  </nav>
+    <nav class="main-nav" role="navigation">
+      <button class="nav-btn active" data-tab="tab-imc">IMC</button>
+      <button class="nav-btn" data-tab="tab-evolucao">Evolução</button>
+      <button class="nav-btn" data-tab="tab-treino">Treino</button>
+      <button class="nav-btn" data-tab="tab-relatorio">Relatório</button>
+    </nav>
 
-  <main class="main-content">
-    <!-- TAB: IMC -->
-    <section id="tab-imc" class="tab active">
-      <div class="card">
-        <h2>Calculadora fitness</h2>
-        <div class="row">
-          <div class="col"><label>Altura (m)</label><input id="altura" type="number" placeholder="Ex: 1.80"></div>
-          <div class="col"><label>Peso (kg)</label><input id="peso" type="number" placeholder="Ex: 80"></div>
-          <div class="col"><label>Peso meta (kg)</label><input id="meta" type="number" placeholder="Ex: 75"></div>
-        </div>
-        <div class="row">
-          <div class="col"><label>Braço (cm)</label><input id="braco" type="number" placeholder="Ex: 40"></div>
-          <div class="col"><label>Perna (cm)</label><input id="perna" type="number" placeholder="Ex: 60"></div>
-          <div class="col"><label>Cintura (cm)</label><input id="cintura" type="number" placeholder="Ex: 85"></div>
-        </div>
-        <div class="row">
-          <div class="col"><label>Pescoço (cm)</label><input id="pescoco" type="number" placeholder="Ex: 38"></div>
-          <div class="col"><label>Quadril (cm - opcional)</label><input id="quadril" type="number" placeholder="Ex: 95"></div>
-          <div class="col"><label>Idade</label><input id="idade" type="number" placeholder="Ex: 28"></div>
-        </div>
-        <div class="row">
-          <div class="col"><label>Sexo</label>
-            <select id="sexo">
-              <option value="">Escolher</option>
-              <option value="male">Masculino</option>
-              <option value="female">Feminino</option>
-            </select>
+    <main class="main-content">
+      <!-- TAB: IMC -->
+      <section id="tab-imc" class="tab active">
+        <div class="card">
+          <h2>Calculadora fitness</h2>
+          <div class="row">
+            <div class="col"><label>Altura (m)</label><input id="altura" type="number" step="0.01" placeholder="Ex: 1.80"></div>
+            <div class="col"><label>Peso (kg)</label><input id="peso" type="number" step="0.1" placeholder="Ex: 80"></div>
+            <div class="col"><label>Peso meta (kg)</label><input id="meta" type="number" step="0.1" placeholder="Ex: 75"></div>
           </div>
-          <div class="col"><label>Objetivo</label>
-            <select id="objetivo">
-              <option value="manter">Manter</option>
-              <option value="emagrecer">Emagrecer</option>
-              <option value="ganhar">Ganho de massa</option>
-              <option value="definir">Definição</option>
-            </select>
+
+          <div class="row">
+            <div class="col"><label>Cintura (cm)</label><input id="cintura" type="number" step="0.1" placeholder="Ex: 85"></div>
+            <div class="col"><label>Idade</label><input id="idade" type="number" placeholder="Ex: 28"></div>
+            <div class="col"><label>Sexo</label>
+              <select id="sexo">
+                <option value="">Escolher</option>
+                <option value="male">Masculino</option>
+                <option value="female">Feminino</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn primary" id="calcBtn">Calcular</button>
+            <button class="btn" id="saveSnapshot">Salvar Medidas</button>
+          </div>
+
+          <div id="resultadoBox" class="resultado"></div>
+        </div>
+
+        <div class="card">
+          <h3>Histórico & Gráfico</h3>
+          <canvas id="chartIMC" height="140"></canvas>
+          <div id="chartExplanation" class="chart-explain">
+            <p><strong>Linha Azul (IMC):</strong> Índice de Massa Corporal — peso / altura². Serve para ter uma ideia geral do peso em relação à altura.</p>
+            <p><strong>Linha Rosa (Gordura % estimada):</strong> Estimativa de gordura corporal calculada via fórmula (IMC + idade + sexo). É apenas uma estimativa — para medida precisa, procure avaliação profissional.</p>
           </div>
         </div>
-        <div class="actions">
-          <button class="btn primary" id="calcBtn">Calcular</button>
-          <button class="btn" id="saveSnapshot">Salvar Medidas</button>
+      </section>
+
+      <!-- TAB: Evolução -->
+      <section id="tab-evolucao" class="tab">
+        <div class="card">
+          <h2>Evolução</h2>
+          <input id="uploadFotoEvolucao" type="file" accept="image/*">
+          <button class="btn" id="addFotoBtn">Adicionar</button>
+          <button class="btn" id="clearPhotos">Limpar tudo</button>
+          <div id="gallery" class="gallery"></div>
         </div>
-        <div id="resultadoBox" class="resultado"></div>
-      </div>
-      <div class="card">
-        <h3>Histórico de IMC</h3>
-        <canvas id="chartIMC" height="120"></canvas>
-      </div>
-    </section>
+      </section>
 
-    <!-- TAB: Evolução -->
-    <section id="tab-evolucao" class="tab">
-      <div class="card">
-        <h2>Evolução</h2>
-        <input id="uploadFotoEvolucao" type="file" accept="image/*">
-        <button class="btn" id="addFotoBtn">Adicionar</button>
-        <button class="btn" id="clearPhotos">Limpar tudo</button>
-        <div id="gallery" class="gallery"></div>
-      </div>
-    </section>
+      <!-- TAB: Treino -->
+      <section id="tab-treino" class="tab">
+        <div class="card">
+          <h2>Plano de Treino</h2>
+          <label>Preset Famoso</label>
+          <select id="presetTreino">
+            <option value="">Nenhum</option>
+            <option value="ramon">Ramon Dino</option>
+            <option value="cbum">Chris Bumstead (CBum)</option>
+            <option value="arnold">Arnold</option>
+          </select>
 
-    <!-- TAB: Treino -->
-    <section id="tab-treino" class="tab">
-      <div class="card">
-        <h2>Plano de Treino</h2>
-        <label>Preset Famoso</label>
-        <select id="presetTreino">
-          <option value="">Nenhum</option>
-          <option value="ramon">Ramon Dino</option>
-          <option value="cbum">Chris Bumstead (CBum)</option>
-          <option value="arnold">Arnold</option>
-        </select>
-        <label>Grupo Muscular</label>
-        <select id="grupoMuscular">
+          <label>Grupo Muscular</label>
+          <select id="grupoMuscular">
+            <option value="">Escolher</option>
+            <option value="costas">Costas</option>
+            <option value="perna">Pernas</option>
+            <option value="peito">Peito</option>
+            <option value="braco">Braços</option>
+          </select>
+
+          <label>Nível</label>
+          <select id="nivel">
+            <option value="iniciante">Iniciante</option>
+            <option value="intermediario">Intermediário</option>
+            <option value="avancado">Avançado</option>
+          </select>
+
+          <div class="actions">
+            <button class="btn primary" id="genTreino">Gerar Treino</button>
+          </div>
+
+          <div id="treinoOutput" class="resultado"></div>
+        </div>
+      </section>
+
+      <!-- TAB: Relatório -->
+      <section id="tab-relatorio" class="tab">
+        <div class="card">
+          <h2>Relatórios & Perfil</h2>
+          <button class="btn" id="downloadJSON">Exportar JSON</button>
+          <button class="btn" id="importJSON">Importar JSON</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <h3>Perfil</h3>
+        <p class="profile-sub">Desenvolvido por <strong>le7ocean</strong> 💪</p>
+
+        <label>Nome</label><input id="profileName" placeholder="Seu nome">
+        <label>Idade</label><input id="profileAge" type="number" min="10" max="120">
+        <label>Sexo</label>
+        <select id="profileSex">
           <option value="">Escolher</option>
-          <option value="costas">Costas</option>
-          <option value="perna">Pernas</option>
-          <option value="peito">Peito</option>
-          <option value="braco">Braços</option>
+          <option value="male">Masculino</option>
+          <option value="female">Feminino</option>
         </select>
-        <label>Nível</label>
-        <select id="nivel">
-          <option value="iniciante">Iniciante</option>
-          <option value="intermediario">Intermediário</option>
-          <option value="avancado">Avançado</option>
-        </select>
-        <div class="actions">
-          <button class="btn primary" id="genTreino">Gerar Treino</button>
+
+        <div class="modal-actions">
+          <button class="btn" id="saveProfile">Salvar</button>
+          <button class="btn" id="closeProfile">Fechar</button>
         </div>
-        <div id="treinoOutput" class="resultado"></div>
-      </div>
-    </section>
-
-    <!-- TAB: Relatório -->
-    <section id="tab-relatorio" class="tab">
-      <div class="card">
-        <h2>Relatórios & Perfil</h2>
-        <button class="btn" id="downloadJSON">Exportar JSON</button>
-        <button class="btn" id="importJSON">Importar JSON</button>
-      </div>
-    </section>
-  </main>
-
-  <!-- ---------- Profile Modal ---------- -->
-  <div id="profileModal" class="modal hidden">
-    <div class="modal-card">
-      <h3>Perfil</h3>
-      <label>Nome</label><input id="profileName" placeholder="Seu nome">
-      <label>Idade</label><input id="profileAge" type="number" min="10" max="120">
-      <label>Sexo</label>
-      <select id="profileSex">
-        <option value="">Escolher</option>
-        <option value="male">Masculino</option>
-        <option value="female">Feminino</option>
-      </select>
-      <div class="modal-actions">
-        <button class="btn" id="saveProfile">Salvar</button>
-        <button class="btn" id="closeProfile">Fechar</button>
       </div>
     </div>
+
+    <footer>Desenvolvido por le7ocean</footer>
   </div>
 
-  <footer>Desenvolvido por leo7ocean</footer>
-</div>
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
