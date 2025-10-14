@@ -3,7 +3,7 @@ Fit7 — Desenvolvido por le7ocean
 Aplicativo web para acompanhar IMC, percentual de gordura corporal, evolução física e treinos personalizados.
 Desenvolvido com HTML, CSS e JavaScript, responsivo e moderno, com suporte a tema claro e escuro.
 
-Funcionalidades
+Funcionalidades:
 
 Calculadora de IMC e Gordura Corporal com histórico gráfico.
 
@@ -17,7 +17,7 @@ Perfil Personalizado com exportação/importação JSON.
 
 Tema Claro e Escuro com contraste ajustado.
 
-Como Usar
+Como Usar:
 
 Abra index.html ou acesse via GitHub Pages.
 
@@ -33,7 +33,7 @@ Use Exportar/Importar JSON para backup.
 
 Alterne entre tema claro e escuro usando o ícone no topo.
 
-Tecnologias
+Tecnologias usadas:
 
 HTML5, CSS3, JavaScript (ES6+)
 
