@@ -1,139 +1,173 @@
-console.log("Fitness App iniciado");
-const STORE_KEY="fitness_app_v1";
-function saveStore(obj){localStorage.setItem(STORE_KEY,JSON.stringify(obj))}
-function loadStore(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{}}catch(e){return{}}}
-let STORE=loadStore();
-if(!STORE.profile) STORE.profile={};
-if(!STORE.history) STORE.history=[];
-if(!STORE.photos) STORE.photos=[];
-saveStore(STORE);
-
-// ---------- Tabs ----------
-const tabBtns=document.querySelectorAll(".nav-btn");
-const sections=document.querySelectorAll(".tab");
-tabBtns.forEach(btn=>btn.addEventListener("click",()=>{openTab(btn.dataset.tab)}));
-function openTab(id){
-  tabBtns.forEach(b=>b.classList.remove("active"));
-  document.querySelectorAll(`[data-tab="${id}"]`).forEach(b=>b.classList.add("active"));
-  sections.forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-// ---------- Profile ----------
-const profileBtn=document.getElementById("profileBtn");
-const profileModal=document.getElementById("profileModal");
-const profileName=document.getElementById("profileName");
-const profileAge=document.getElementById("profileAge");
-const profileSex=document.getElementById("profileSex");
-const saveProfileBtn=document.getElementById("saveProfile");
-const closeProfileBtn=document.getElementById("closeProfile");
-
-profileBtn?.addEventListener("click",()=>{
-  profileModal.classList.remove("hidden");
-  profileName.value=STORE.profile.name||"";
-  profileAge.value=STORE.profile.age||"";
-  profileSex.value=STORE.profile.sex||"";
-});
-saveProfileBtn?.addEventListener("click",()=>{
-  STORE.profile={name:profileName.value,age:profileAge.value,sex:profileSex.value};
-  saveStore(STORE);
-  profileModal.classList.add("hidden");
-});
-closeProfileBtn?.addEventListener("click",()=>profileModal.classList.add("hidden"));
-
-// ---------- IMC ----------
-const alturaInput=document.getElementById("altura");
-const pesoInput=document.getElementById("peso");
-const metaInput=document.getElementById("meta");
-const bracoInput=document.getElementById("braco");
-const pernaInput=document.getElementById("perna");
-const cinturaInput=document.getElementById("cintura");
-const idadeInput=document.getElementById("idade");
-const sexoSelect=document.getElementById("sexo");
-const objetivoSelect=document.getElementById("objetivo");
-const resultadoBox=document.getElementById("resultadoBox");
-const calcBtn=document.getElementById("calcBtn");
-
-calcBtn?.addEventListener("click",()=>{
-  const altura=parseFloat(alturaInput.value);
-  const peso=parseFloat(pesoInput.value);
-  if(!altura||!peso){alert("Preencha altura e peso");return;}
-  const imc=peso/(altura*altura);
-  resultadoBox.innerHTML=`<p>Seu IMC: <b>${imc.toFixed(2)}</b></p>`;
-  STORE.history.push({timestamp:new Date().toISOString(),imc});
-  saveStore(STORE);
-  renderChart();
-});
-
-// ---------- Chart ----------
-const ctx=document.getElementById("chartIMC").getContext("2d");
-let chartIMC=new Chart(ctx,{type:"line",data:{labels:[],datasets:[{label:"IMC",data:[],borderColor:"#ff6b6b",fill:false}]},options:{responsive:true,plugins:{legend:{display:true}}}});
-function renderChart(){
-  chartIMC.data.labels=STORE.history.map(h=>new Date(h.timestamp).toLocaleDateString());
-  chartIMC.data.datasets[0].data=STORE.history.map(h=>h.imc);
-  chartIMC.update();
-}
-renderChart();
-
-// ---------- Evolução ----------
-const gallery=document.getElementById("gallery");
-const uploadFotoEvolucao=document.getElementById("uploadFotoEvolucao");
-const addFotoBtn=document.getElementById("addFotoBtn");
-const clearPhotosBtn=document.getElementById("clearPhotos");
-
-function renderGallery(){
-  gallery.innerHTML="";
-  STORE.photos.forEach((src,i)=>{
-    const div=document.createElement("div");div.className="foto";
-    const img=document.createElement("img");img.src=src;img.addEventListener("click",()=>openLightbox(src));
-    const del=document.createElement("button");del.className="del";del.textContent="X";del.addEventListener("click",()=>{STORE.photos.splice(i,1);saveStore(STORE);renderGallery();});
-    div.appendChild(img);div.appendChild(del);
-    gallery.appendChild(div);
+// ---------- TABS ----------
+const tabs = document.querySelectorAll('.nav-btn');
+const sections = document.querySelectorAll('.tab');
+tabs.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabs.forEach(b => b.classList.remove('active'));
+    sections.forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
   });
+});
+
+// ---------- TEMA (CLARO/ESCURO) ----------
+const darkToggle = document.getElementById('darkToggle');
+const app = document.querySelector('.app');
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
+  app.classList.add('dark');
+  darkToggle.textContent = '☀️';
 }
-addFotoBtn?.addEventListener("click",()=>{
-  if(uploadFotoEvolucao.files.length===0)return;
-  const file=uploadFotoEvolucao.files[0];
-  const reader=new FileReader();
-  reader.onload=e=>{
-    STORE.photos.push(e.target.result);
-    saveStore(STORE);
-    renderGallery();
-  };reader.readAsDataURL(file);
+darkToggle.addEventListener('click', () => {
+  app.classList.toggle('dark');
+  const isDark = app.classList.contains('dark');
+  darkToggle.textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
 });
-clearPhotosBtn?.addEventListener("click",()=>{STORE.photos=[];saveStore(STORE);renderGallery();});
-renderGallery();
 
-// ---------- Lightbox ----------
-function openLightbox(src){
-  let lb=document.getElementById("lightbox");
-  if(!lb){lb=document.createElement("div");lb.id="lightbox";lb.className="modal hidden";const img=document.createElement("img");img.id="lightboxImg";lb.appendChild(img);document.body.appendChild(lb);}
-  lb.querySelector("#lightboxImg").src=src;
-  lb.classList.remove("hidden");
+// ---------- PERFIL ----------
+const profileBtn = document.getElementById('profileBtn');
+const profileModal = document.getElementById('profileModal');
+const closeProfile = document.getElementById('closeProfile');
+const saveProfile = document.getElementById('saveProfile');
+const profileName = document.getElementById('profileName');
+const profileAge = document.getElementById('profileAge');
+const profileSex = document.getElementById('profileSex');
+
+let profile = JSON.parse(localStorage.getItem('profile')) || {};
+if (profile.name) {
+  profileName.value = profile.name;
+  profileAge.value = profile.age;
+  profileSex.value = profile.sex;
 }
-function closeLightbox(){document.getElementById("lightbox").classList.add("hidden");}
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeLightbox()});
 
-// ---------- Treino ----------
-const genTreinoBtn=document.getElementById("genTreino");
-const treinoOutput=document.getElementById("treinoOutput");
-genTreinoBtn?.addEventListener("click",()=>{
-  const preset=document.getElementById("presetTreino").value;
-  const grupo=document.getElementById("grupoMuscular").value;
-  const nivel=document.getElementById("nivel").value;
-  let treino=`Treino Gerado: ${grupo||"Não selecionado"} - Nível ${nivel||"Não definido"}<br>`;
-  if(preset) treino+=`Preset: ${preset}<br>`;
-  treino+="Exercícios:<ul><li>Ex1</li><li>Ex2</li><li>Ex3</li></ul>";
-  treinoOutput.innerHTML=treino;
+profileBtn.addEventListener('click', () => profileModal.classList.remove('hidden'));
+closeProfile.addEventListener('click', () => profileModal.classList.add('hidden'));
+saveProfile.addEventListener('click', () => {
+  profile = {
+    name: profileName.value,
+    age: profileAge.value,
+    sex: profileSex.value
+  };
+  localStorage.setItem('profile', JSON.stringify(profile));
+  profileModal.classList.add('hidden');
 });
 
-// ---------- JSON Export/Import ----------
-document.getElementById("downloadJSON")?.addEventListener("click",()=>{
-  const dataStr="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(STORE,null,2));
-  const a=document.createElement("a");a.href=dataStr;a.download="fitness_store.json";a.click();
+// ---------- CALCULAR IMC + GORDURA CORPORAL ----------
+const calcBtn = document.getElementById('calcBtn');
+calcBtn.addEventListener('click', () => {
+  const altura = parseFloat(document.getElementById('altura').value);
+  const peso = parseFloat(document.getElementById('peso').value);
+  const cintura = parseFloat(document.getElementById('cintura').value);
+  const pescoco = parseFloat(document.getElementById('pescoco').value);
+  const quadril = parseFloat(document.getElementById('quadril').value);
+  const sexo = document.getElementById('sexo').value;
+
+  if (!altura || !peso) return alert('Preencha altura e peso');
+
+  const imc = peso / (altura * altura);
+  let gordura;
+
+  if (sexo === 'male') {
+    gordura = 495 / (1.0324 - 0.19077 * Math.log10(cintura - pescoco) + 0.15456 * Math.log10(altura * 100)) - 450;
+  } else if (sexo === 'female') {
+    gordura = 495 / (1.29579 - 0.35004 * Math.log10(cintura + quadril - pescoco) + 0.22100 * Math.log10(altura * 100)) - 450;
+  } else {
+    gordura = '—';
+  }
+
+  const resultado = document.getElementById('resultadoBox');
+  resultado.innerHTML = `
+    <p><b>IMC:</b> ${imc.toFixed(1)}</p>
+    <p><b>Gordura corporal:</b> ${typeof gordura === 'number' ? gordura.toFixed(1) + '%' : gordura}</p>
+  `;
+
+  addIMCToChart(imc);
 });
-document.getElementById("importJSON")?.addEventListener("click",()=>{
-  const input=document.createElement("input");input.type="file";input.accept="application/json";
-  input.onchange=()=>{const file=input.files[0];const reader=new FileReader();reader.onload=e=>{try{STORE=JSON.parse(e.target.result);saveStore(STORE);renderGallery();renderChart();alert("Importado com sucesso!");}catch(e){alert("Arquivo inválido")}};reader.readAsText(file);}
-  input.click();
+
+// ---------- GRÁFICO DE IMC ----------
+const ctx = document.getElementById('chartIMC');
+const imcData = JSON.parse(localStorage.getItem('imcData')) || [];
+const chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: imcData.map((_, i) => i + 1),
+    datasets: [{
+      label: 'IMC',
+      data: imcData,
+      borderWidth: 2
+    }]
+  },
+  options: { scales: { y: { beginAtZero: false } } }
+});
+
+function addIMCToChart(imc) {
+  imcData.push(imc);
+  localStorage.setItem('imcData', JSON.stringify(imcData));
+  chart.data.labels.push(imcData.length);
+  chart.data.datasets[0].data.push(imc);
+  chart.update();
+}
+
+// ---------- EVOLUÇÃO (FOTOS) ----------
+const gallery = document.getElementById('gallery');
+const addFotoBtn = document.getElementById('addFotoBtn');
+const uploadFotoEvolucao = document.getElementById('uploadFotoEvolucao');
+const clearPhotos = document.getElementById('clearPhotos');
+let fotos = JSON.parse(localStorage.getItem('fotos')) || [];
+
+function renderFotos() {
+  gallery.innerHTML = fotos.map(src => `<img src="${src}" alt="foto">`).join('');
+}
+renderFotos();
+
+addFotoBtn.addEventListener('click', () => {
+  const file = uploadFotoEvolucao.files[0];
+  if (!file) return alert('Selecione uma imagem');
+  const reader = new FileReader();
+  reader.onload = e => {
+    fotos.push(e.target.result);
+    localStorage.setItem('fotos', JSON.stringify(fotos));
+    renderFotos();
+  };
+  reader.readAsDataURL(file);
+});
+
+clearPhotos.addEventListener('click', () => {
+  if (confirm('Deseja remover todas as fotos?')) {
+    fotos = [];
+    localStorage.removeItem('fotos');
+    renderFotos();
+  }
+});
+
+// ---------- TREINO ----------
+const genTreino = document.getElementById('genTreino');
+const treinoOutput = document.getElementById('treinoOutput');
+
+const treinos = {
+  costas: ['Puxada frontal', 'Remada curvada', 'Serrote', 'Barra fixa'],
+  perna: ['Agachamento livre', 'Cadeira extensora', 'Cadeira flexora', 'Leg press'],
+  peito: ['Supino reto', 'Supino inclinado', 'Crucifixo', 'Flexão de braço'],
+  braco: ['Rosca direta', 'Tríceps testa', 'Martelo', 'Tríceps corda']
+};
+
+genTreino.addEventListener('click', () => {
+  const grupo = document.getElementById('grupoMuscular').value;
+  if (!grupo) return alert('Escolha um grupo muscular');
+  const lista = treinos[grupo];
+  treinoOutput.innerHTML = `<ul>${lista.map(e => `<li>${e}</li>`).join('')}</ul>`;
+});
+
+// ---------- EXPORTAR JSON (APENAS PERFIL) ----------
+const downloadJSON = document.getElementById('downloadJSON');
+downloadJSON.addEventListener('click', () => {
+  const jsonData = JSON.stringify(profile, null, 2);
+  const blob = new Blob([jsonData], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'perfil.json';
+  a.click();
+  URL.revokeObjectURL(url);
 });
