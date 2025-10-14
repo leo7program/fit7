@@ -358,4 +358,17 @@ importJSONBtn.addEventListener('click', ()=>{
 // ========= Acessibilidade: fechar modal com ESC =========
 document.addEventListener('keydown', e=>{
   if(e.key === 'Escape') profileModal.classList.add('hidden');
+
+  // RESETAR GRÁFICO
+const resetChartBtn = document.getElementById('resetChart');
+resetChartBtn.addEventListener('click', ()=>{
+  if(confirm('Deseja resetar todo o histórico de IMC e gordura?')){
+    STORE.imcHistory = [];
+    saveStore(STORE);
+    chart.destroy();
+    chart = buildChart();
+    alert('Histórico resetado.');
+  }
+});
+
 });
