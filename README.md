@@ -1,4 +1,4 @@
-Fit7 — Desenvolvido por le7ocean
+Fit7 — Desenvolvido por leo7ocean
 
 Aplicativo web para acompanhar IMC, percentual de gordura corporal, evolução física e treinos personalizados.
 Desenvolvido com HTML, CSS e JavaScript, responsivo e moderno, com suporte a tema claro e escuro.
