@@ -354,6 +354,3 @@ importJSONBtn.addEventListener('click', ()=>{
   };
   input.click();
 });
-
-
-
