@@ -200,6 +200,31 @@ function buildChart(){
 }
 
 let chart = buildChart();
+// função para adicionar nova entrada
+function updateChartWithEntry(entry){
+  chart.data.labels.push(new Date(entry.ts).toLocaleDateString());
+  chart.data.datasets[0].data.push(entry.imc);
+  chart.data.datasets[1].data.push(entry.gordura === null ? null : entry.gordura);
+  chart.update();
+}
+
+// rebuild se já houver histórico
+if(STORE.imcHistory.length > 0){
+  chart.destroy();
+  chart = buildChart();
+}
+
+// ========= RESETAR GRÁFICOS =========
+const resetChartBtn = document.getElementById('resetChartBtn');
+resetChartBtn.addEventListener('click', ()=>{
+  if(confirm('Deseja realmente resetar todo o histórico de IMC e Gordura?')){
+    STORE.imcHistory = [];
+    saveStore(STORE);           // salva vazio no LocalStorage
+    resultadoBox.innerHTML = ''; // limpa resultado exibido
+    if(chart) chart.destroy();   // destrói gráfico atual
+    chart = buildChart();        // recria gráfico vazio
+  }
+});
 
 function updateChartWithEntry(entry){
   chart.data.labels.push(new Date(entry.ts).toLocaleDateString());
@@ -352,17 +377,5 @@ importJSONBtn.addEventListener('click', ()=>{
     };
     reader.readAsText(file);
   };
-  // ========= RESETAR GRÁFICOS =========
-const resetChartBtn = document.getElementById('resetChartBtn');
-
-resetChartBtn.addEventListener('click', ()=>{
-  if(confirm('Deseja realmente resetar todo o histórico de IMC e Gordura?')){
-    STORE.imcHistory = []; // limpa o histórico
-    saveStore(STORE);      // salva no localStorage
-    chart.destroy();       // destrói gráfico antigo
-    chart = buildChart();  // recria gráfico vazio
-    resultadoBox.innerHTML = ''; // limpa resultado exibido
-  }
-});
   input.click();
 });
