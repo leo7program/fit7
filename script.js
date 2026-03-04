@@ -10,6 +10,7 @@ let STORE = loadStore();
 if(!STORE.profile) STORE.profile = {};
 if(!STORE.imcHistory) STORE.imcHistory = [];   // {ts, imc, gordura}
 if(!STORE.photos) STORE.photos = [];
+if(!STORE.snapshots) STORE.snapshots = [];
 saveStore(STORE);
 
 // ========= TABS =========
@@ -89,49 +90,26 @@ function estimateBodyFat(bmi, age, sex){
   return 1.20*bmi + 0.23*(age||0) - 10.8*s - 5.4;
 }
 
-calcBtn.addEventListener('click', ()=>{
-  const altura = parseFloat(document.getElementById('altura').value);
-  const peso = parseFloat(document.getElementById('peso').value);
-  const cintura = parseFloat(document.getElementById('cintura').value); // ainda coletamos mas não é obrigatório
-  const idade = parseInt(document.getElementById('idade').value,10) || 0;
-  const sexo = document.getElementById('sexo').value;
-
-  if(!altura || !peso){ alert('Preencha altura e peso'); return; }
-  const imc = calcIMC(peso, altura);
-  const gordura = (sexo === 'male' || sexo === 'female') ? estimateBodyFat(imc, idade, sexo) : null;
-
-  // mostrar no resultado
-  resultadoBox.innerHTML = `
-    <p><strong>IMC:</strong> ${imc.toFixed(1)}</p>
-    <p><strong>Gordura estimada:</strong> ${gordura !== null ? gordura.toFixed(1) + '%' : '—'}</p>
-  `;
-
-  // salvar no histórico
-  const entry = { ts: new Date().toISOString(), imc: parseFloat(imc.toFixed(2)), gordura: gordura !== null ? parseFloat(gordura.toFixed(2)) : null };
-  STORE.imcHistory.push(entry);
-  saveStore(STORE);
-  updateChartWithEntry(entry);
-});
-
 // ========= GRÁFICO (IMC + GORDURA) =========
-const chartCtx = document.getElementById('chartIMC').getContext('2d');
-function buildChart(){
-  const labels = STORE.imcHistory.map(e => {
-    const dt = new Date(e.ts);
-    return dt.toLocaleDateString();
-  });
+const chartCanvas = document.getElementById('chartIMC');
+let chart;
+
+function buildChart() {
+  const labels = STORE.imcHistory.map(e => new Date(e.ts).toLocaleDateString());
   const imcData = STORE.imcHistory.map(e => e.imc);
   const gordData = STORE.imcHistory.map(e => e.gordura === null ? null : e.gordura);
 
-  const gradientIMC = chartCtx.createLinearGradient(0,0,0,300);
+  const ctx = chartCanvas.getContext('2d');
+
+  const gradientIMC = ctx.createLinearGradient(0,0,0,300);
   gradientIMC.addColorStop(0, 'rgba(124,58,237,0.25)');
   gradientIMC.addColorStop(1, 'rgba(124,58,237,0.03)');
 
-  const gradientGord = chartCtx.createLinearGradient(0,0,0,300);
+  const gradientGord = ctx.createLinearGradient(0,0,0,300);
   gradientGord.addColorStop(0, 'rgba(255,107,129,0.22)');
   gradientGord.addColorStop(1, 'rgba(255,107,129,0.03)');
 
-  return new Chart(chartCtx, {
+  return new Chart(ctx, {
     type: 'line',
     data: {
       labels,
@@ -199,46 +177,51 @@ function buildChart(){
   });
 }
 
-let chart = buildChart();
+// inicializa gráfico
+chart = buildChart();
+
 // função para adicionar nova entrada
 function updateChartWithEntry(entry){
+  STORE.imcHistory.push(entry);
+  saveStore(STORE);
+
   chart.data.labels.push(new Date(entry.ts).toLocaleDateString());
   chart.data.datasets[0].data.push(entry.imc);
   chart.data.datasets[1].data.push(entry.gordura === null ? null : entry.gordura);
   chart.update();
 }
 
-// rebuild se já houver histórico
-if(STORE.imcHistory.length > 0){
-  chart.destroy();
-  chart = buildChart();
-}
+// botão calcular
+calcBtn.addEventListener('click', ()=>{
+  const altura = parseFloat(document.getElementById('altura').value);
+  const peso = parseFloat(document.getElementById('peso').value);
+  const idade = parseInt(document.getElementById('idade').value,10) || 0;
+  const sexo = document.getElementById('sexo').value;
+
+  if(!altura || !peso){ alert('Preencha altura e peso'); return; }
+  const imc = calcIMC(peso, altura);
+  const gordura = (sexo === 'male' || sexo === 'female') ? estimateBodyFat(imc, idade, sexo) : null;
+
+  resultadoBox.innerHTML = `
+    <p><strong>IMC:</strong> ${imc.toFixed(1)}</p>
+    <p><strong>Gordura estimada:</strong> ${gordura !== null ? gordura.toFixed(1)+'%' : '—'}</p>
+  `;
+
+  const entry = { ts: new Date().toISOString(), imc: parseFloat(imc.toFixed(2)), gordura: gordura !== null ? parseFloat(gordura.toFixed(2)) : null };
+  updateChartWithEntry(entry);
+});
 
 // ========= RESETAR GRÁFICOS =========
 const resetChartBtn = document.getElementById('resetChartBtn');
 resetChartBtn.addEventListener('click', ()=>{
   if(confirm('Deseja realmente resetar todo o histórico de IMC e Gordura?')){
     STORE.imcHistory = [];
-    saveStore(STORE);           // salva vazio no LocalStorage
-    resultadoBox.innerHTML = ''; // limpa resultado exibido
-    if(chart) chart.destroy();   // destrói gráfico atual
-    chart = buildChart();        // recria gráfico vazio
+    saveStore(STORE);           
+    resultadoBox.innerHTML = '';
+    if(chart) chart.destroy();
+    chart = buildChart();
   }
 });
-
-function updateChartWithEntry(entry){
-  chart.data.labels.push(new Date(entry.ts).toLocaleDateString());
-  chart.data.datasets[0].data.push(entry.imc);
-  chart.data.datasets[1].data.push(entry.gordura === null ? null : entry.gordura);
-  chart.update();
-}
-
-// inicializa com dados já gravados
-if(STORE.imcHistory.length > 0){
-  // rebuild chart with existing data (chart already built from STORE)
-  chart.destroy();
-  chart = buildChart();
-}
 
 // ========= SALVAR SNAPSHOT (medidas) =========
 document.getElementById('saveSnapshot').addEventListener('click', ()=>{
@@ -248,7 +231,6 @@ document.getElementById('saveSnapshot').addEventListener('click', ()=>{
   const idade = document.getElementById('idade').value;
   const sexo = document.getElementById('sexo').value;
   if(!altura || !peso) return alert('Preencha altura e peso antes de salvar.');
-  if(!STORE.snapshots) STORE.snapshots = [];
   STORE.snapshots.push({ ts: new Date().toISOString(), altura, peso, cintura, idade, sexo });
   saveStore(STORE);
   alert('Medidas salvas.');
@@ -300,7 +282,7 @@ clearPhotos.addEventListener('click', ()=>{
   }
 });
 
-// ========= TREINOS (com exercícios reais por grupo e nível) =========
+// ========= TREINOS =========
 const genTreinoBtn = document.getElementById('genTreino');
 const treinoOutput = document.getElementById('treinoOutput');
 
@@ -327,7 +309,6 @@ genTreinoBtn.addEventListener('click', ()=>{
   const list = baseExercises[grupo].slice(0,4);
   const lvl = levelAdjust[nivel];
 
-  // se preset famoso for escolhido, adaptamos repetições/sets visualmente
   let presetNote = '';
   if(preset === 'cbum') presetNote = 'Preset CBum: foco em hipertrofia, mais volume.';
   if(preset === 'arnold') presetNote = 'Preset Arnold: foco em força e volume clássico.';
@@ -344,7 +325,7 @@ genTreinoBtn.addEventListener('click', ()=>{
   treinoOutput.innerHTML = html;
 });
 
-// ========= EXPORTAR / IMPORTAR JSON (apenas perfil) =========
+// ========= EXPORTAR / IMPORTAR JSON =========
 const downloadJSON = document.getElementById('downloadJSON');
 const importJSONBtn = document.getElementById('importJSON');
 
