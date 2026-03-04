@@ -352,5 +352,17 @@ importJSONBtn.addEventListener('click', ()=>{
     };
     reader.readAsText(file);
   };
+  // ========= RESETAR GRÁFICOS =========
+const resetChartBtn = document.getElementById('resetChartBtn');
+
+resetChartBtn.addEventListener('click', ()=>{
+  if(confirm('Deseja realmente resetar todo o histórico de IMC e Gordura?')){
+    STORE.imcHistory = []; // limpa o histórico
+    saveStore(STORE);      // salva no localStorage
+    chart.destroy();       // destrói gráfico antigo
+    chart = buildChart();  // recria gráfico vazio
+    resultadoBox.innerHTML = ''; // limpa resultado exibido
+  }
+});
   input.click();
 });
